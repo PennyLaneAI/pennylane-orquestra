@@ -39,6 +39,12 @@ jobs:
           pip install -r steps/steps_requirements.txt
           pip install wheel pytest pytest-cov pytest-mock flaky --upgrade
 
+      - name: Run Forest Quilc
+        run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
+
+      - name: Run Forest QVM
+        run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
+
       - name: Run tests
         run: python -m pytest steps/test_* $COVERAGE_FLAGS
 
