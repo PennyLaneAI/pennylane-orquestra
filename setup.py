@@ -4,7 +4,7 @@ import os
 with open("pennylane_orquestra/_version.py") as f:
     version = f.readlines()[-1].split()[-1].strip("\"'")
 
-requirements = ["pyyaml", "pennylane>=0.11"]
+requirements = ["pyyaml", "pennylane>=0.13"]
 
 info = {
     'name': 'PennyLane-Orquestra',
