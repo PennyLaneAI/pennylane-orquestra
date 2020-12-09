@@ -17,9 +17,7 @@ jobs:
     strategy:
       matrix:
         config:
-          - {python-version: 3.6}
           - {python-version: 3.7}
-          - {python-version: 3.8}
           - {python-version: 3.8}
 
     steps:
