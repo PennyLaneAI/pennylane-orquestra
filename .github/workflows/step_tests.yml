@@ -1,4 +1,4 @@
-name: PennyLane component tests
+name: PennyLane-Orquestra component tests
 on:
   push:
     branches:
