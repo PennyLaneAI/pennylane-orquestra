@@ -9,9 +9,9 @@ requirements = ["pyyaml", "pennylane>=0.11"]
 info = {
     'name': 'PennyLane-Orquestra',
     'version': version,
-    'author': 'Antal Szava',
-    'author_email': 'antalszava@gmail.com',
-    'url': 'https://github.com/antalszava/pl_orquestra',
+    'maintainer': 'Xanadu Inc.',
+    'maintainer_email': 'software@xanadu.ai',
+    'url': 'https://github.com/PennyLaneAI/pennylane-orquestra',
     'packages': [
         'pl_component',
         'pennylane_orquestra',
