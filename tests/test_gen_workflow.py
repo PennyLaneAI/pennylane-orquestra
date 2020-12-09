@@ -16,11 +16,9 @@ Tests for the gen_workflow module that allows generating Orquestra workflows
 used by the plugin.
 """
 import pytest
-import subprocess
 
 import yaml
 import pennylane_orquestra.gen_workflow as gw
-from pennylane_orquestra.cli_actions import qe_submit
 
 from conftest import (
     resources_default,
@@ -29,7 +27,6 @@ from conftest import (
     operator_string_default,
     test_workflow,
     test_workflow_resources,
-    qe_list_workflow,
 )
 
 def compare_two_expval_steps(stepA, stepB):
@@ -74,7 +71,7 @@ class TestExpvalTemplate:
 
         with open(file_name, "w") as file:
             # Testing that no errors arise here
-            d = yaml.dump(workflow, file)
+            yaml.dump(workflow, file)
 
     def test_unsupported_backend_component(self):
         """Test that if an unsupported backend component is input then an error is raised."""
@@ -82,7 +79,7 @@ class TestExpvalTemplate:
 
         # Fill in workflow template
         with pytest.raises(ValueError, match="The specified backend component is not supported."):
-            workflow = gw.gen_expval_workflow(
+            gw.gen_expval_workflow(
                 backend_component,
                 backend_specs_default,
                 qasm_circuit_default,
