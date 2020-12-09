@@ -9,12 +9,12 @@ with open(readme_path, "r") as f:
 setuptools.setup(	
     name="pl_orquestra",	
     version="0.0.1",	
-    author="Antal Szava",	
-    author_email="antalszava@gmail.com",	
-    description="Integrations for deploying on Orquestra",	
+    maintainer="Xanadu Inc.",
+    maintainer_email="software@xanadu.ai",
+    description="The PennyLane component on Orquestra",
     long_description=long_description,	
     long_description_content_type="text/markdown",	
-    url="https://github.com/antalszava/pl_orquestra",	
+    url="https://github.com/PennyLaneAI/pennylane-orquestra",
     packages=setuptools.find_packages(where="src/python"),	
     package_dir={"": "python"},	
     classifiers=(	
