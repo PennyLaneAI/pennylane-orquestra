@@ -94,9 +94,10 @@ class TestExpvalSampling:
         expval.run_circuit_and_get_expval(backend_specs, hadamard_qasm, op)
         assert math.isclose(lst[0][0], 0.0, abs_tol=tol)
 
-    def test_hadamard_expectation(self, backend_specs, monkeypatch):
+    @pytest.mark.xfail
+    def test_hadamard_expectation_plugin_integration(self, backend_specs, monkeypatch):
         """Test that the expectation value of the Hadamard is computed
-        correctly."""
+        correctly when integrating the step function with the plugin."""
         n_wires = 2
 
         theta = 0.432
