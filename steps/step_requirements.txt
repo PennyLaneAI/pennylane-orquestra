@@ -1,0 +1,13 @@
+qiskit==0.18.3
+qiskit-ibmq-provider==0.6.1
+pyquil==2.17.0
+numpy>=1.18.1
+git+https://github.com/zapatacomputing/qe-qiskit#dev
+git+https://github.com/zapatacomputing/qe-qulacs#dev
+git+https://github.com/zapatacomputing/qe-forest#dev
+git+https://github.com/zapatacomputing/z-quantum-core.git#dev
+git+https://github.com/zapatacomputing/qe-openfermion#dev
+pytest
+pytest-cov
+pytest-mock
+flaky
