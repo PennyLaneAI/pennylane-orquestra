@@ -7,3 +7,4 @@ git+https://github.com/zapatacomputing/qe-qulacs#dev
 git+https://github.com/zapatacomputing/qe-forest#dev
 git+https://github.com/zapatacomputing/z-quantum-core.git#dev
 git+https://github.com/zapatacomputing/qe-openfermion#dev
+pennylane>=0.13.0
