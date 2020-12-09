@@ -1,0 +1,53 @@
+name: PennyLane component tests
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+
+env:
+  COVERAGE_FLAGS: "--cov=steps --cov-report=term-missing --cov-report=xml --no-flaky-report -p no:warnings --tb=native"
+
+
+jobs:
+  core-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        config:
+          - {python-version: 3.6}
+          - {python-version: 3.7}
+          - {python-version: 3.8}
+          - {python-version: 3.8}
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
+
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.config.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r steps/steps_requirements.txt
+          pip install wheel pytest pytest-cov pytest-mock flaky --upgrade
+
+      - name: Run tests
+        run: python -m pytest steps/test_* $COVERAGE_FLAGS
+
+      - name: Adjust coverage file for Codecov
+        run: bash <(sed -i 's/filename=\"/filename=\"pennylane_orquestra_steps\//g' coverage.xml)
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
