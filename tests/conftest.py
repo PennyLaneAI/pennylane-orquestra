@@ -20,54 +20,6 @@ import os
 import pennylane as qml
 from copy import deepcopy
 
-# Auxiliary classes and functions
-def qe_list_workflow():
-    """Function for a CLI call to list workflows.
-
-    This CLI call needs the caller to be logged in to Orquestra. It is an
-    inexpensive way of checking that the caller has been authenticated with the
-    Orquestra platform.
-    """
-    process = subprocess.Popen(
-        ["qe", "list", "workflow"], stdout=subprocess.PIPE, universal_newlines=True
-    )
-    return process.stdout.readlines()
-
-
-class MockPopen:
-    """A mock class that allows to mock the self.stdout.readlines() call."""
-
-    def __init__(self, msg=None):
-        class MockStdOut:
-            def __init__(self, msg):
-                self.msg = msg
-
-            def readlines(self, *args):
-                if self.msg is None:
-                    self.msg = [
-                        "Successfully submitted workflow to quantum engine!\n",
-                        "SomeWorkflowID",
-                    ]
-                return self.msg
-
-        self.stdout = MockStdOut(msg)
-
-
-@pytest.fixture(
-    scope="module",
-    params=[
-        None,
-        qml.wires.Wires(
-            list("ab") + [-3, 42] + ["xyz", "23", "wireX"] + ["w{}".format(i) for i in range(20)]
-        ),
-        list(range(100, 120)),
-        {13 - i: "abcdefghijklmn"[i] for i in range(14)},
-    ],
-)
-def custom_wires(request):
-    """Custom wire mapping for Pennylane<->OpenFermion conversion"""
-    return request.param
-
 
 # Auxiliary data
 
