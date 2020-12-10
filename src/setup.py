@@ -21,7 +21,7 @@ with open(readme_path, "r") as f:
 
 
 setuptools.setup(	
-    name="pl_orquestra",	
+    name="pennylane_orquestra_steps",
     version="0.13.0-dev",
     maintainer="Xanadu Inc.",
     maintainer_email="software@xanadu.ai",
