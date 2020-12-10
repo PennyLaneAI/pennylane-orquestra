@@ -45,7 +45,7 @@ def run_circuit_and_get_expval(
     There are two computation modes: sampling and exact. Expectation values are
     computed by post-processing samples when an Orquestra ``QuantumBackend`` is
     used or the number of samples was specified for a ``QuantumSimulator``
-    backend. When the number of samples was not specified, ``QuantumSimulator``
+    backend. When the number of samples isn't specified, ``QuantumSimulator``
     backends run in exact mode.
 
     Args:
