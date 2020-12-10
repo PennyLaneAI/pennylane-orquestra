@@ -161,6 +161,8 @@ class TestCLIFunctions:
             m.setattr(urllib.request, "urlretrieve", lambda *args, **kwargs: (test_tar,))
             assert loop_until_finished("Some ID", timeout=1) == decoded_data
 
+    # Expected to fail if qe is unavailable
+    @pytest.mark.xfail(raises=RuntimeError)
     def test_invalid_url_loop_till_timeout(self, monkeypatch):
         """Test that when receiving an invalid url, looping continues until the
         timeout."""
