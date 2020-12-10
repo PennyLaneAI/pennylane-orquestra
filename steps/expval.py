@@ -38,9 +38,9 @@ def run_circuit_and_get_expval(
     """Takes a circuit to obtain the expectation value of an operator on a
     given backend.
 
-    All backend calls used in this function are defined as ``QuantumBackend``
-    and ``QuantumSimulator`` interface standard methods implemented are defined
-    in the ``z-quantum-core`` repository.
+    All Orquestra backend interface calls used in this function are standard
+    methods of the ``QuantumBackend`` and ``QuantumSimulator`` interfaces as
+    defined in the ``z-quantum-core`` repository.
 
     There are two computation modes: sampling and exact. Expectation values are
     computed by post-processing samples when an Orquestra ``QuantumBackend`` is
