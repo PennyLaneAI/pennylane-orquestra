@@ -65,12 +65,13 @@ def run_circuit_and_get_expval(
 
     # 2. Create operators
     ops = []
-    for op in operators:
-        if backend.n_samples is not None:
-            # Operator for Backend/Simulator in sampling mode
+    if backend.n_samples is not None:
+        # Operators for Backend/Simulator in sampling mode
+        for op in operators:
             ops.append(IsingOperator(op))
-        else:
-            # Operator for Simulator exact mode
+    else:
+        # Operators for Simulator exact mode
+        for op in operators:
             ops.append(QubitOperator(op))
 
     # 2.+1
