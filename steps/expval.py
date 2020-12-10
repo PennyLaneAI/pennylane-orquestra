@@ -93,7 +93,7 @@ def run_circuit_and_get_expval(
     op_qubits = [term[0][0] for op in ops for term in op.terms if term]
 
     need_to_activate = set(op_qubits) - active_qubits
-    if not need_to_activate == set():
+    if need_to_activate:
         for qubit in need_to_activate:
             # Apply the identity
             qc.id(qubit)
