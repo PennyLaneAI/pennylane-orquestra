@@ -1,4 +1,4 @@
-An approach for integrating PennyLane with Orquestra.
+A package for integrating PennyLane with Orquestra.
 
 **Installation**
 
