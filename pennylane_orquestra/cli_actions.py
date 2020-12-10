@@ -218,6 +218,8 @@ def loop_until_finished(workflow_id, timeout=300):
     # Setting filename=None will treat the file as temporary and it will be
     # removed
     file_tmp = urllib.request.urlretrieve(location, filename=None)[0]
+
+    # Data is retrieved as a tarball, need to extract the json file within
     if tarfile.is_tarfile(file_tmp):
         tar = tarfile.open(file_tmp, "r:gz")
         tar.extractall()
