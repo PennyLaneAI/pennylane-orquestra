@@ -17,4 +17,4 @@ The `src` folder contains further server-side auxiliary code (if any).
 *Client-side*
 
 The `pennylane_orquestra` folder contains client-side code created as a
-PennyLane-Orquestra plugin.
+PennyLane plugin.
