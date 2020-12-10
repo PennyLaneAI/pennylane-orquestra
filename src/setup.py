@@ -21,11 +21,11 @@ with open(readme_path, "r") as f:
 
 
 setuptools.setup(	
-    name="pl_orquestra",	
-    version="0.0.1",	
+    name="pennylane_orquestra_steps",
+    version="0.13.0-dev",
     maintainer="Xanadu Inc.",
     maintainer_email="software@xanadu.ai",
-    description="The PennyLane component on Orquestra",
+    description="The PennyLane component for the PennyLane-Orquestra plugin",
     long_description=long_description,	
     long_description_content_type="text/markdown",	
     url="https://github.com/PennyLaneAI/pennylane-orquestra",

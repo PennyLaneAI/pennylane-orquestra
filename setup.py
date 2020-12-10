@@ -38,10 +38,10 @@ info = {
             'orquestra.forest = pennylane_orquestra:QeForestDevice',
             ]
     },
-    'description': 'PennyLane is a Python quantum machine learning library by Xanadu Inc.',
+    'description': 'PennyLane plugin for Orquestra by Xanadu Inc.',
     'long_description': open('README.md').read(),
     'long_description_content_type': 'text/x-rst',
-    'provides': ['pennylane'],
+    'provides': ['pennylane_orquestra'],
     'install_requires': requirements,
     'package_dir': {
         'pl_component': 'src/python',
