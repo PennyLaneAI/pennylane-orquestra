@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Tests for the gen_workflow module that allows generating Orquestra workflows
+Tests for the gen_workflow subpackage that allows generating Orquestra workflows
 used by the plugin.
 """
 import pytest
