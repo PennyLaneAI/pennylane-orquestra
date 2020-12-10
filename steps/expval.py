@@ -31,7 +31,7 @@ from zquantum.core.utils import create_object, save_list
 
 
 def run_circuit_and_get_expval(
-    backend_specs: dict,
+    backend_specs: str,
     circuit: str,
     operators: str,
 ):
@@ -49,7 +49,7 @@ def run_circuit_and_get_expval(
     backends run in exact mode.
 
     Args:
-        backend_specs (dict): the parsed Orquestra backend specifications
+        backend_specs (str): the parsed Orquestra backend specifications
         circuit (str): the circuit represented as an OpenQASM 2.0 program
         operators (str): the operator in an ``openfermion.QubitOperator``
             or ``openfermion.IsingOperator`` representation
