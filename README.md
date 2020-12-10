@@ -5,7 +5,7 @@ An approach for integrating PennyLane with Orquestra.
 Installing [PennyLane](https://github.com/PennyLaneAI/pennylane) and the [Quantum Engine CLI](https://github.com/zapatacomputing/qe-cli) are required.
 
 The package can be installed using `pip` and running `pip install -e .` from
-the `pl_orquestra` folder.
+the `pennylane_orquestra` folder.
 
 **Folder structure**
 
