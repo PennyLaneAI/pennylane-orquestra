@@ -25,7 +25,7 @@ setuptools.setup(
     version="0.0.1",	
     maintainer="Xanadu Inc.",
     maintainer_email="software@xanadu.ai",
-    description="The PennyLane component on Orquestra",
+    description="The PennyLane component for the PennyLane-Orquestra plugin",
     long_description=long_description,	
     long_description_content_type="text/markdown",	
     url="https://github.com/PennyLaneAI/pennylane-orquestra",
