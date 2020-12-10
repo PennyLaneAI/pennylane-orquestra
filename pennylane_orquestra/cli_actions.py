@@ -215,7 +215,7 @@ def loop_until_finished(workflow_id, timeout=300):
             continue
 
     # 3. Obtain the data from the URL
-    # Seting filename=None will treat the file as temporary and it will be
+    # Setting filename=None will treat the file as temporary and it will be
     # removed
     file_tmp = urllib.request.urlretrieve(location, filename=None)[0]
     if tarfile.is_tarfile(file_tmp):
