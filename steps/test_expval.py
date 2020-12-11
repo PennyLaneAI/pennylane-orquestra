@@ -59,6 +59,8 @@ class TestExpvalExact:
 
         only_measure_qasm = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\ncreg c[3];\n'
 
+        # Instead of creating a json at the end of the step, just append it to
+        # a local list
         monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val))
 
         expval.run_circuit_and_get_expval(backend_specs, only_measure_qasm, op)
@@ -72,6 +74,8 @@ class TestExpvalExact:
         hadamard_qasm = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg c[2];\nh q[0];\n'
         op = '["[Z0]"]'
 
+        # Instead of creating a json at the end of the step, just append it to
+        # a local list
         monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val))
 
         expval.run_circuit_and_get_expval(backend_specs, hadamard_qasm, op)
@@ -89,6 +93,8 @@ class TestExpvalExact:
 
         op = '["[Z0]", "[Z1]"]'
 
+        # Instead of creating a json at the end of the step, just append it to
+        # a local list
         monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val))
 
         expval.run_circuit_and_get_expval(backend_specs, circ_qasm, op)
@@ -111,6 +117,8 @@ class TestExpvalSampling:
 
         simple_qasm = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\ncreg c[3];\n'
 
+        # Instead of creating a json at the end of the step, just append it to
+        # a local list
         monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val[0]))
 
         expval.run_circuit_and_get_expval(backend_specs, simple_qasm, op)
@@ -124,6 +132,8 @@ class TestExpvalSampling:
         hadamard_qasm = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg c[2];\nh q[0];\n'
         op = '["[Z0]"]'
 
+        # Instead of creating a json at the end of the step, just append it to
+        # a local list
         monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val))
 
         expval.run_circuit_and_get_expval(backend_specs, hadamard_qasm, op)
@@ -141,6 +151,8 @@ class TestExpvalSampling:
 
         op = '["[Z0]", "[Z1]"]'
 
+        # Instead of creating a json at the end of the step, just append it to
+        # a local list
         monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val))
 
         expval.run_circuit_and_get_expval(backend_specs, circ_qasm, op)
@@ -173,6 +185,8 @@ class TestExpvalSampling:
 
         lst = []
 
+        # Instead of creating a json at the end of the step, just append it to
+        # a local list
         monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val))
         expval.run_circuit_and_get_expval(dev.backend_specs, qasm_circuit, ops)
         expected = np.array(
@@ -207,6 +221,8 @@ class TestIBMQ:
 
         simple_qasm = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\ncreg c[3];\n'
 
+        # Instead of creating a json at the end of the step, just append it to
+        # a local list
         monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val))
 
         expval.run_circuit_and_get_expval(backend_specs, simple_qasm, op)
