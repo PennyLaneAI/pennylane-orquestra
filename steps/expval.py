@@ -91,7 +91,7 @@ def run_circuit_and_get_expval(
     # Data for identities is not stored, need to account for empty terms
     op_qubits = [term[0][0] for op in ops for term in op.terms if term]
 
-    need_to_activate = set(op_qubits) - active_qubits
+    need_to_activate = set(op_qubits) - set(active_qubits)
     if need_to_activate:
         for qubit in need_to_activate:
             # Apply the identity
