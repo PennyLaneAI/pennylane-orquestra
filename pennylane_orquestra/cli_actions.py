@@ -42,7 +42,8 @@ def qe_get(workflow_id, option="workflow"):
             Examples include ``workflow`` and ``workflowresult``.
 
     Returns:
-        str: response message of the CLI call
+        list: the list of strings representing the response message of the CLI
+        call
     """
     process = subprocess.Popen(
         ["qe", "get", option, str(workflow_id)], stdout=subprocess.PIPE, universal_newlines=True
@@ -102,7 +103,8 @@ def workflow_details(workflow_id):
             retrieved
 
     Returns:
-        str: response message of the CLI call
+        list: the list of strings representing the response message of the CLI
+        call
     """
     return qe_get(workflow_id, option="workflow")
 
@@ -119,7 +121,8 @@ def workflow_results(workflow_id):
             Examples include ``workflow`` and ``workflowresult``.
 
     Returns:
-        str: response message of the CLI call
+        list: the list of strings representing the response message of the CLI
+        call
     """
     return qe_get(workflow_id, option="workflowresult")
 
