@@ -86,7 +86,6 @@ def run_circuit_and_get_expval(
         instruction_qubits = [qubit.index for qubit in instr[1]]
         active_qubits.extend(instruction_qubits)
 
-    active_qubits = set(active_qubits)
 
     # Get the qubits we'd like to measure
     # Data for identities is not stored, need to account for empty terms
