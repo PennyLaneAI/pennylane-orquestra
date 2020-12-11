@@ -37,8 +37,8 @@ class TestCLIFunctions:
     """Test functions for CLI actions work as expected."""
 
     def test_submit_raises_no_success(self, monkeypatch):
-        """Test that the qe_submit method raises an error if not a successful
-        message was received."""
+        """Test that the qe_submit method raises an error if a success
+        message was not received."""
 
         no_success_msg = "Not a success message."
         with monkeypatch.context() as m:
