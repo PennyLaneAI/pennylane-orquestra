@@ -77,6 +77,27 @@ class TestExpvalExact:
         expval.run_circuit_and_get_expval(backend_specs, hadamard_qasm, op)
         assert math.isclose(lst[0][0], 0.0, abs_tol=analytic_tol)
 
+    def test_run_circuit_and_get_expval_rot_cnot(self, backend_specs, monkeypatch):
+        """Tests that the correct result in obtained for a circuit that
+        contains rotations and a CNOT."""
+        lst = []
+
+        theta = 0.432
+        phi = 0.123
+
+        circ_qasm = f'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg c[2];\nrx({theta}) q[0];\nrx({phi}) q[1];\ncx q[0],q[1];'
+
+        op = '["[Z0]", "[Z1]"]'
+
+        monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val))
+
+        expval.run_circuit_and_get_expval(backend_specs, circ_qasm, op)
+
+        res = np.array(lst[0])
+        assert np.allclose(
+            res, np.array([np.cos(theta), np.cos(theta) * np.cos(phi)]), atol=analytic_tol
+        )
+
 
 @pytest.mark.parametrize("backend_specs", sampling_devices)
 class TestExpvalSampling:
@@ -107,6 +128,25 @@ class TestExpvalSampling:
 
         expval.run_circuit_and_get_expval(backend_specs, hadamard_qasm, op)
         assert math.isclose(lst[0][0], 0.0, abs_tol=tol)
+
+    def test_run_circuit_and_get_expval_rot_cnot(self, backend_specs, monkeypatch):
+        """Tests that the correct result in obtained for a circuit that
+        contains rotations and a CNOT."""
+        lst = []
+
+        theta = 0.432
+        phi = 0.123
+
+        circ_qasm = f'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg c[2];\nrx({theta}) q[0];\nrx({phi}) q[1];\ncx q[0],q[1];'
+
+        op = '["[Z0]", "[Z1]"]'
+
+        monkeypatch.setattr(expval, "save_list", lambda val, name: lst.append(val))
+
+        expval.run_circuit_and_get_expval(backend_specs, circ_qasm, op)
+
+        res = np.array(lst[0])
+        assert np.allclose(res, np.array([np.cos(theta), np.cos(theta) * np.cos(phi)]), atol=tol)
 
     @pytest.mark.xfail
     def test_hadamard_expectation_plugin_integration(self, backend_specs, monkeypatch):
