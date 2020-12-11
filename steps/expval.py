@@ -35,7 +35,7 @@ def run_circuit_and_get_expval(
     circuit: str,
     operators: str,
 ):
-    """Takes a circuit to obtain the expectation value of an operator on a
+    """Executes a circuit to obtain the expectation value of an operator on a
     given backend.
 
     All Orquestra backend interface calls used in this function are standard
