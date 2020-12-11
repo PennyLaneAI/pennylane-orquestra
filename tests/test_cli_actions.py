@@ -190,7 +190,7 @@ class TestCLIFunctions:
                 m.setattr(urllib.request, "urlretrieve", lambda *args, **kwargs: (test_file,))
                 loop_until_finished("Some ID", timeout=1)
 
-    # Expected to fail if qe is unavailable
+    # Expected to fail if qe is unavailable (for example for the CI)
     @pytest.mark.xfail(raises=FileNotFoundError)
     def test_invalid_url_loop_till_timeout(self, monkeypatch):
         """Test that when receiving an invalid url, looping continues until the
