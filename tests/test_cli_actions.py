@@ -68,7 +68,7 @@ class TestCLIFunctions:
 
         mock_results = "12345"
 
-        def mock_qe_get(option=None):
+        def mock_qe_get(*args, option=None):
             if option == "workflowresult":
                 return mock_results
 
