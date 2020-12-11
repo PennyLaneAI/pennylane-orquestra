@@ -222,7 +222,7 @@ def loop_until_finished(workflow_id, timeout=300):
     # removed
     file_tmp = urllib.request.urlretrieve(location, filename=None)[0]
 
-    # Data is retrieved as a tarball, need to extract the json file within
+    # Data is retrieved as a tarfile, need to extract the json file within
     if tarfile.is_tarfile(file_tmp):
         tar = tarfile.open(file_tmp, "r:gz")
         tar.extractall()
@@ -230,5 +230,7 @@ def loop_until_finished(workflow_id, timeout=300):
 
         with open("workflow_result.json") as json_file:
             data = json.load(json_file)
+    else:
+        raise ValueError(f"Unexpected datatype for the retrieved result: not a tarfile.")
 
     return data

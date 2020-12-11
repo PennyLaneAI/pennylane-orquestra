@@ -16,19 +16,21 @@
 Unit tests for the ```cli_actions`` module, without sending any requests to
 Orquestra.
 """
-import pytest
+import json
+import os
 import subprocess
 import tarfile
-import os
 import urllib.request
-import json
 
+import pytest
 import yaml
-import pennylane_orquestra.gen_workflow as gw
-import pennylane_orquestra
-from pennylane_orquestra.cli_actions import qe_submit, write_workflow_file, loop_until_finished
 
-from conftest import backend_specs_default, qasm_circuit_default, operator_string_default, MockPopen
+import pennylane_orquestra
+import pennylane_orquestra.gen_workflow as gw
+from conftest import (MockPopen, backend_specs_default,
+                      operator_string_default, qasm_circuit_default)
+from pennylane_orquestra.cli_actions import (loop_until_finished, qe_submit,
+                                             write_workflow_file)
 
 
 class TestCLIFunctions:
@@ -44,7 +46,7 @@ class TestCLIFunctions:
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen(no_success_msg))
 
             with pytest.raises(ValueError, match=no_success_msg):
-                workflow_id = qe_submit("some_filename")
+                qe_submit("some_filename")
 
     @pytest.mark.parametrize("response", [["Test Success"], "Test Success"])
     def test_submit_raises_unexpected_resp(self, monkeypatch, response):
@@ -58,7 +60,7 @@ class TestCLIFunctions:
             m.setattr(os, "remove", lambda *args, **kwargs: None)
 
             with pytest.raises(ValueError, match=unexp_resp_msg):
-                workflow_id = qe_submit("some_filename")
+                qe_submit("some_filename")
 
     def test_workflow_results(self, monkeypatch):
         """Test that the workflow_results function passes the correct option to
@@ -66,7 +68,7 @@ class TestCLIFunctions:
 
         mock_results = "12345"
 
-        def mock_qe_get(wf_id, option=None):
+        def mock_qe_get(option=None):
             if option == "workflowresult":
                 return mock_results
 
@@ -108,7 +110,7 @@ class TestCLIFunctions:
             # Check that indexing into the message raises an IndexError
             # (this shows that it will be handled internally)
             with pytest.raises(IndexError, match="list index out of range"):
-                location = res_msg[1].split()[1]
+                res_msg[1].split()[1]
 
             # Check that looping eventually times out
             with pytest.raises(TimeoutError, match="were not obtained after"):
@@ -151,7 +153,6 @@ class TestCLIFunctions:
         # Change to the test directory
         os.chdir(tmpdir)
         with monkeypatch.context() as m:
-            status = "Status:              Failed\n"
             result_message = ["Some message2", "Some location"]
 
             m.setattr(
@@ -161,37 +162,44 @@ class TestCLIFunctions:
             m.setattr(urllib.request, "urlretrieve", lambda *args, **kwargs: (test_tar,))
             assert loop_until_finished("Some ID", timeout=1) == decoded_data
 
+    def test_unexpected_datatype_result(self, monkeypatch, tmpdir):
+        """Test that an error is raised when the result is not a tarfile."""
+        decoded_data = {"res": "Decoded Data"}
+        test_file = os.path.join(tmpdir, "workflow_result.json")
+        test_tar = os.path.join(tmpdir, "test.tgz")
+
+        with open(test_file, "w") as outfile:
+            json.dump(decoded_data, outfile)
+
+        tar = tarfile.open(test_tar, mode="w:gz")
+        tar.add(test_tar)
+        tar.close()
+
+        # Change to the test directory
+        os.chdir(tmpdir)
+        with pytest.raises(ValueError, match="not a tarfile"):
+            with monkeypatch.context() as m:
+                result_message = ["Some message2", "Some location"]
+
+                m.setattr(
+                    pennylane_orquestra.cli_actions, "workflow_results", lambda *args: result_message
+                )
+                m.setattr(urllib.request, "urlopen", lambda arg: arg)
+
+                # test_file is a json file instead of a tarfile
+                m.setattr(urllib.request, "urlretrieve", lambda *args, **kwargs: (test_file,))
+                loop_until_finished("Some ID", timeout=1)
+
     # Expected to fail if qe is unavailable
     @pytest.mark.xfail(raises=FileNotFoundError)
     def test_invalid_url_loop_till_timeout(self, monkeypatch):
         """Test that when receiving an invalid url, looping continues until the
         timeout."""
-        decoded_data = "Decoded Data"
-
-        class MockDecodableObj:
-            """A mock class that can be decoded."""
-
-            def decode(self):
-                return decoded_data
-
-        class MockURL:
-            """A mock class for URLs that can serve as a context manager."""
-
-            def __enter__(self):
-                pass
-
-            def __exit__(self, *args):
-                pass
-
-            def read(self):
-                return MockDecodableObj()
-
         def raise_urllib_error(*args):
             """Auxiliary function that raises a URLError."""
             raise urllib.error.URLError("Test error due to an incorrect URL.")
 
         with monkeypatch.context() as m:
-            status = "Status:              Failed\n"
             result_message = ["Some message2", "Some location"]
 
             m.setattr(
