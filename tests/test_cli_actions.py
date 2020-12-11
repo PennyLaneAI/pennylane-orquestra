@@ -177,17 +177,17 @@ class TestCLIFunctions:
 
         # Change to the test directory
         os.chdir(tmpdir)
-        with pytest.raises(ValueError, match="not a tarfile"):
-            with monkeypatch.context() as m:
-                result_message = ["Some message2", "Some location"]
+        with monkeypatch.context() as m:
+            result_message = ["Some message2", "Some location"]
 
-                m.setattr(
-                    pennylane_orquestra.cli_actions, "workflow_results", lambda *args: result_message
-                )
-                m.setattr(urllib.request, "urlopen", lambda arg: arg)
+            m.setattr(
+                pennylane_orquestra.cli_actions, "workflow_results", lambda *args: result_message
+            )
+            m.setattr(urllib.request, "urlopen", lambda arg: arg)
 
-                # test_file is a json file instead of a tarfile
-                m.setattr(urllib.request, "urlretrieve", lambda *args, **kwargs: (test_file,))
+            # test_file is a json file instead of a tarfile
+            m.setattr(urllib.request, "urlretrieve", lambda *args, **kwargs: (test_file,))
+            with pytest.raises(ValueError, match="not a tarfile"):
                 loop_until_finished("Some ID", timeout=1)
 
     # Expected to fail if qe is unavailable (for example for the CI)
