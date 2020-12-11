@@ -131,7 +131,7 @@ def write_workflow_file(filename, workflow):
     """Write a workflow file given the name of the file.
 
     This function will create a YAML file with the workflow content. The file
-    is placed into a user specific data folder specified by using
+    is placed into a user-specific data folder specified by using
     ``appdirs.user_data_dir``.
 
     Args:
