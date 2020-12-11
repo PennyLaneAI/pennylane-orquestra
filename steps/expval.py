@@ -35,7 +35,7 @@ def run_circuit_and_get_expval(
     circuit: str,
     operators: str,
 ):
-    """Takes a circuit to obtain the expectation value of an operator on a
+    """Executes a circuit to obtain the expectation value of an operator on a
     given backend.
 
     All Orquestra backend interface calls used in this function are standard
@@ -65,12 +65,13 @@ def run_circuit_and_get_expval(
 
     # 2. Create operators
     ops = []
-    for op in operators:
-        if backend.n_samples is not None:
-            # Operator for Backend/Simulator in sampling mode
+    if backend.n_samples is not None:
+        # Operators for Backend/Simulator in sampling mode
+        for op in operators:
             ops.append(IsingOperator(op))
-        else:
-            # Operator for Simulator exact mode
+    else:
+        # Operators for Simulator exact mode
+        for op in operators:
             ops.append(QubitOperator(op))
 
     # 2.+1
@@ -92,7 +93,7 @@ def run_circuit_and_get_expval(
     op_qubits = [term[0][0] for op in ops for term in op.terms if term]
 
     need_to_activate = set(op_qubits) - active_qubits
-    if not need_to_activate == set():
+    if need_to_activate:
         for qubit in need_to_activate:
             # Apply the identity
             qc.id(qubit)
