@@ -227,7 +227,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         """
         qasm_str = circuit.to_openqasm(rotations=not self.analytic)
 
-        qasm_without_measurements = re.sub("measure.*?;\n", "", qasm_str)
+        qasm_without_measurements = re.sub("measure.*?;\n?\s*", "", qasm_str)
         return qasm_without_measurements
 
     def process_observables(self, observables):
