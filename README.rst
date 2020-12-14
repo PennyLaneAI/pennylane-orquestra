@@ -32,9 +32,9 @@ system for quantum computing with PennyLane's quantum machine learning
 capabilities.
 
 `PennyLane <https://pennylane.readthedocs.io>`_ is a cross-platform Python
-library for <a
-href="https://en.wikipedia.org/wiki/Differentiable_programming">differentiable
-programming</a> of quantum computers.
+library for `differentiable programming
+<https://en.wikipedia.org/wiki/Differentiable_programming>`_ of quantum
+computers.
 
 `Orquestra <https://www.orquestra.io/>`_ is a workflow management system for quantum computing.
 
@@ -56,26 +56,26 @@ Features
 
 .. installation-start-inclusion-marker-do-not-remove
 
-Folder structure
-================
-
-The source folder contains furth sub-folders for both server and client-side
-code.
-
-*Server-side*
-
-The `steps` subfolder contains the functions used in generated workflows as steps.
-The `src` subfolder contains further server-side auxiliary code (if any).
-
-*Client-side*
-
-The `pennylane_orquestra` subfolder contains client-side code making up the
-PennyLane-Orquestra plugin.
-
 Installation
 ============
 
-This plugin requires Python version 3.6 and above, as well as PennyLane and the [Quantum Engine CLI](https://github.com/zapatacomputing/qe-cli) are required .
+Folder structure of the plugin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The source folder of the plugin contains sub-folders for both server and
+client-side code:
+
+1. *Server-side*: the ``steps`` subfolder contains the functions used in
+   generated workflows as steps and the ``src`` subfolder contains further
+   server-side auxiliary code (if any).
+
+2. *Client-side*: the ``pennylane_orquestra`` subfolder contains client-side
+   code making up the PennyLane-Orquestra plugin.
+
+Installation and tests
+~~~~~~~~~~~~~~~~~~~~~~
+
+This plugin requires Python version 3.6 and above, as well as PennyLane and the `Quantum Engine CLI <https://github.com/zapatacomputing/qe-cli>`_ are required .
 Installation of this plugin, as well as all dependencies, can be done using ``pip``:
 
 .. code-block:: bash
@@ -105,10 +105,11 @@ the end-to-end integration of the plugin can be run with ``make test-e2e``.
     this means that the test are "free". Please verify that this is also the
     case for your account.
 
-There are further test cases for the ``steps`` used by the PennyLane-Orquestra
-plugin. To run these, Python version 3.7 and above is required along with the
-dependencies contained in the ``steps/requirements_for_tests.txt``. Once these
-are available, running ``make test-steps`` will run the ``steps`` test suite.
+Further test cases for the ``steps`` used by the PennyLane-Orquestra plugin are
+located in ``steps/tests``. To run these, Python version 3.7 and above is
+required along with the dependencies contained in the
+``steps/requirements_for_tests.txt``. Once these are available, running ``make
+test-steps`` will run the ``steps`` test suite.
 
 .. installation-end-inclusion-marker-do-not-remove
 
