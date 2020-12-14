@@ -344,7 +344,6 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             need_decomposition = observable.name not in accepted_obs
 
         if need_decomposition:
-
             original_observable = observable
 
             # Decompose the matrix of the observable
