@@ -170,6 +170,11 @@ def loop_until_finished(workflow_id, timeout=300):
 
     Returns:
         dict: the resulting dictionary parsed from a json file
+
+    Raises:
+        TimeoutError: if no response was obtained after the timeout
+        ValueError: if the workflow execution failed or if the result was not
+        returned as a tarfile
     """
     start = time.time()
     query_results = True
