@@ -236,6 +236,6 @@ def loop_until_finished(workflow_id, timeout=300):
         with open("workflow_result.json") as json_file:
             data = json.load(json_file)
     else:
-        raise ValueError(f"Unexpected datatype for the retrieved result: not a tarfile.")
+        raise ValueError("Unexpected datatype for the retrieved result: not a tarfile.")
 
     return data
