@@ -14,11 +14,12 @@
 """
 Data and auxiliary functions used for testing the PennyLane-Orquestra plugin.
 """
-import subprocess
-import pytest
 import os
-import pennylane as qml
+import subprocess
 from copy import deepcopy
+
+import pennylane as qml
+import pytest
 
 
 # Auxiliary classes and functions
