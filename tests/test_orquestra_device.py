@@ -55,8 +55,7 @@ class TestBaseDevice:
         sampling mode."""
         with pytest.warns(
             Warning,
-            match="The qasm_simulator backend device cannot be used in "
-            "analytic mode. Results are based on sampling.",
+            match="cannot be used in analytic",
         ):
             dev = qml.device("orquestra.qiskit", backend="qasm_simulator", wires=2, analytic=True)
 
@@ -66,7 +65,7 @@ class TestBaseDevice:
         """Test that a warning is raised when using the IBMQDevice in analytic
         mode and that we'll switch to sampling mode."""
         with pytest.warns(
-            Warning, match="device cannot be used in analytic mode. Results are based on sampling."
+            Warning, match="cannot be used in analytic"
         ):
             dev = qml.device("orquestra.ibmq", wires=2, analytic=True, ibmqx_token="Some token")
 
