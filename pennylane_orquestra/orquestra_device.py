@@ -164,7 +164,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         backend_specs["function_name"] = self.qe_function_name
 
         if self.backend is not None:
-            # Only backends that have multiple backend need to specify one
+            # Only devices that allow multiple backends need to specify one
             # E.g., qe-qiskit
             backend_specs["device_name"] = self.backend
 
