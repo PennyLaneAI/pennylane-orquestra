@@ -30,7 +30,7 @@ class QeQiskitDevice(OrquestraDevice):
 
     def __init__(self, wires, shots=1024, backend="qasm_simulator", **kwargs):
         if backend == "qasm_simulator":
-            if "analytic" in kwargs and kwargs["analytic"]:
+            if kwargs.get("analytic", None):
                 # Raise a warning if the analytic attribute was set to True
                 warnings.warn(
                     "The qasm_simulator backend device cannot be used in "
