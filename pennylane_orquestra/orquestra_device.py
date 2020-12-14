@@ -72,7 +72,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             ``~.batch_execute`` method to send multiple workflows
         keep_files=False (bool): Whether or not the workflow files
             generated during the circuit execution should be kept or deleted.
-        resources (dict): the resources to be specified for each workflow step
+        resources=None (dict): the resources to be specified for each workflow step
         timeout=300 (int): seconds to wait until raising a TimeoutError
     """
 
