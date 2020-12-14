@@ -16,12 +16,12 @@
 This module contains utilities and auxiliary functions for using the Orquestra
 Quantum Engine command line interface (CLI).
 """
-import subprocess
-import time
-import os
-import urllib.request
 import json
+import os
+import subprocess
 import tarfile
+import time
+import urllib.request
 
 import yaml
 from appdirs import user_data_dir
