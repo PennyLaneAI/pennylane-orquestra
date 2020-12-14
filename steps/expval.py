@@ -76,7 +76,7 @@ def run_circuit_and_get_expval(
 
     # 2.+1
     # Activate the qubits that are measured but were not acted on
-    # By applying the identity
+    # by applying the identity
     # Note: this is a temporary logic subject to be removed once supported by
     # Orquestra
 
