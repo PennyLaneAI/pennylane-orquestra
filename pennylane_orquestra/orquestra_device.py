@@ -259,9 +259,8 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         return ops, identity_indices
 
     def serialize_operator(self, observable):
-        """
-        Serialize the observable specified for the circuit as an OpenFermion
-        operator.
+        """Serialize the observable specified for the circuit as an
+        OpenFermion operator.
 
         Args:
             observable (~.Observable): the observable to get the operator
