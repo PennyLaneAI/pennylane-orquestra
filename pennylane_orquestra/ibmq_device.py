@@ -32,7 +32,7 @@ class QeIBMQDevice(OrquestraDevice):
 
     def __init__(self, wires, shots=1024, backend="ibmq_qasm_simulator", **kwargs):
 
-        self._token = os.getenv("IBMQX_TOKEN") or kwargs.get("ibmqx_token", None)
+        self._token = kwargs.get("ibmqx_token", None) or os.getenv("IBMQX_TOKEN")
 
         if self._token is None:
             raise ValueError(
