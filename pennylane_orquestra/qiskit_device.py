@@ -33,8 +33,9 @@ class QeQiskitDevice(OrquestraDevice):
             if "analytic" in kwargs and kwargs["analytic"]:
                 # Raise a warning if the analytic attribute was set to True
                 warnings.warn(
-                    "The qasm_simulator backend device cannot be used in "
-                    "analytic mode. Results are based on sampling."
+                    "The {self.short_name} device cannot be used in analytic "
+                    "mode. Setting analytic to False, results are based on "
+                    "sampling."
                 )
 
             kwargs["analytic"] = False
