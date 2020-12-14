@@ -305,6 +305,8 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             str: the ``openfermion.IsingOperator`` string representation
         """
         op_wires_but_last = [f"Z{w} " for w in wires[:-1]]
+
+        # No space after the last wire
         op_last_wire = f"Z{wires[-1]}"
         op_str = "".join(["[", *op_wires_but_last, op_last_wire, "]"])
         return op_str
