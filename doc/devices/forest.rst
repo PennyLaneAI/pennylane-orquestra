@@ -1,15 +1,15 @@
 The Forest device
 =================
-The ``orquestra.qiskit`` device provided by the PennyLane-Orquestra plugin allows you to use PennyLane
+The ``orquestra.forest`` device provided by the PennyLane-Orquestra plugin allows you to use PennyLane
 to deploy and run your quantum machine learning models on the backends and simulators provided
-by `Qiskit Aer <https://qiskit.org/aer/>`_.
+by `Rigetti Forest SDK <https://pyquil-docs.rigetti.com/en/stable/>`_.
 
-You can instantiate a ``'orquestra.qiskit'`` device for PennyLane with:
+You can instantiate a ``'orquestra.forest'`` device for PennyLane with:
 
 .. code-block:: python
 
     import pennylane as qml
-    dev = qml.device('orquestra.qiskit', wires=2)
+    dev = qml.device('orquestra.forest', wires=2)
 
 This device can then be used just like other devices for the definition and evaluation of QNodes within PennyLane.
 A simple quantum function that returns the expectation value of a measurement and depends on three classical input
@@ -34,9 +34,10 @@ You can then execute the circuit like any other function to get the quantum mech
 Backends
 ~~~~~~~~
 
-Qiskit's Aer layer has several backends, for example ``'qasm_simulator'``,
-``'statevector_simulator'``, ``'unitary_simulator'``. For more information on backends, please visit the
-`Aer provider documentation <https://qiskit.org/documentation/apidoc/aer_provider.html>`_.
+The PennyLane-Orquestra Forest device has several backends, for example
+``'wavefunction-simulator'`` and ``'numpywavefunction-simulator'``. For
+more information on backends, please visit the `Aer provider documentation
+<https://forest.org/documentation/apidoc/aer_provider.html>`_.
 
 
 To get a current overview what backends are available you can query
@@ -49,18 +50,18 @@ or, alternatively,
 
 .. code-block:: python
 
-    from qiskit import Aer
+    from forest import Aer
     Aer.backends()
 
 .. note::
 
     Currently, PennyLane does not support the ``'pulse_simulator'`` backend.
 
-You can change a ``'orquestra.qiskit'`` device's backend with the ``backend`` argument when creating the ``device``:
+You can change a ``'orquestra.forest'`` device's backend with the ``backend`` argument when creating the ``device``:
 
 .. code-block:: python
 
-    dev = qml.device('orquestra.qiskit', wires=2, backend='unitary_simulator')
+    dev = qml.device('orquestra.forest', wires=2, backend='unitary_simulator')
 
 Backend options
 ~~~~~~~~~~~~~~~
@@ -69,30 +70,30 @@ Qiskit's backends can take different *backend options*, for example to specify t
 precision of the simulation.
 You can find a list of backend options in the backends' respective API documentations:
 
-* `'qasm_simulator' <https://qiskit.org/documentation/stubs/qiskit.providers.aer.QasmSimulator.html>`_
-* `'statevector_simulator' <https://qiskit.org/documentation/stubs/qiskit.providers.aer.StatevectorSimulator.html>`_
-* `'unitary_simulator' <https://qiskit.org/documentation/stubs/qiskit.providers.aer.UnitarySimulator.html>`_
+* `'qasm_simulator' <https://forest.org/documentation/stubs/qiskit.providers.aer.QasmSimulator.html>`_
+* `'statevector_simulator' <https://forest.org/documentation/stubs/qiskit.providers.aer.StatevectorSimulator.html>`_
+* `'unitary_simulator' <https://forest.org/documentation/stubs/qiskit.providers.aer.UnitarySimulator.html>`_
 
 The options are set via
 
 .. code-block:: python
 
-    dev = qml.device('orquestra.qiskit', wires=2, backend='unitary_simulator',
+    dev = qml.device('orquestra.forest', wires=2, backend='unitary_simulator',
                      backend_options={"validation_threshold": 1e-6})
 
 Noise models
 ~~~~~~~~~~~~
 
-One great feature of the ``'orquestra.qiskit'`` device is the ability to simulate noise. There are different noise models,
+One great feature of the ``'orquestra.forest'`` device is the ability to simulate noise. There are different noise models,
 which you can instantiate and apply to the device as follows
-(adapting `this <https://qiskit.org/documentation/apidoc/aer_noise.html>`_ qiskit tutorial):
+(adapting `this <https://forest.org/documentation/apidoc/aer_noise.html>`_ qiskit tutorial):
 
 .. code-block:: python
 
     import pennylane as qml
 
-    import qiskit
-    import qiskit.providers.aer.noise as noise
+    import forest
+    import forest.providers.aer.noise as noise
 
     # Error probabilities
     prob_1 = 0.001  # 1-qubit gate
@@ -108,7 +109,7 @@ which you can instantiate and apply to the device as follows
     noise_model.add_all_qubit_quantum_error(error_2, ['cx'])
 
     # Create a PennyLane device
-    dev = qml.device('orquestra.qiskit', wires=2, noise_model=noise_model)
+    dev = qml.device('orquestra.forest', wires=2, noise_model=noise_model)
 
     # Create a PennyLane quantum node run on the device
     @qml.qnode(dev)
@@ -123,4 +124,4 @@ which you can instantiate and apply to the device as follows
     print(circuit(0.2, 0.1, 0.3))
 
 Please refer to the Qiskit documentation for more information on
-`noise models <https://qiskit.org/documentation/tutorials/simulators/3_building_noise_models.html>`_.
+`noise models <https://forest.org/documentation/tutorials/simulators/3_building_noise_models.html>`_.
