@@ -39,7 +39,7 @@ class QeIBMQDevice(OrquestraDevice):
                 "Please pass a valid IBMQX token to the device using the 'ibmqx_token' argument."
             )
 
-        if "analytic" in kwargs and kwargs["analytic"]:
+        if kwargs.get("analytic", None):
             # Raise a warning if the analytic attribute was set to True
             warnings.warn(
                 "The {self.short_name} device cannot be used in "
