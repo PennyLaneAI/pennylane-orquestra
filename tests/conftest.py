@@ -53,6 +53,20 @@ class MockPopen:
 
         self.stdout = MockStdOut(msg)
 
+@pytest.fixture(
+    scope="module",
+    params=[
+        None,
+        qml.wires.Wires(
+            list("ab") + [-3, 42] + ["xyz", "23", "wireX"] + ["w{}".format(i) for i in range(20)]
+        ),
+        list(range(100, 120)),
+        {13 - i: "abcdefghijklmn"[i] for i in range(14)},
+    ],
+)
+def custom_wires(request):
+    """Custom wire mapping for Pennylane<->OpenFermion conversion"""
+    return request.param
 
 
 # Auxiliary data
@@ -169,3 +183,30 @@ test_workflow = {
 test_workflow_resources = deepcopy(test_workflow)
 test_workflow_resources["steps"][0]["config"]["resources"] = resources_default
 test_workflow_resources["steps"][1]["config"]["resources"] = resources_default
+
+# Test workflow result for 3 steps
+
+test_batch_res0 = 0.777506938122745
+test_batch_res1 = 13.321
+test_batch_res2 = 1.234
+
+step_name0 = "run-circuit-and-get-expval-0"
+step_name1 = "run-circuit-and-get-expval-1"
+step_name2 = "run-circuit-and-get-expval-2"
+
+@pytest.fixture()
+def test_result():
+    """Example test result for a workflow."""
+    test_res = {
+        "expval-id000": {
+            "expval": {
+                "list": [test_batch_res0],
+                "schema": "test",
+            },
+            "stepId": "expval",
+            "stepName": step_name0,
+            "workflowId": "expval",
+        },
+    }
+
+    return test_res
