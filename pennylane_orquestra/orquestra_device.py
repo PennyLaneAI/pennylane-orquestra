@@ -319,8 +319,8 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         return op_str
 
     def qubit_operator_string(self, observable):
-        """Creates an OpenFermion operator string from an observable that can
-        be passed when creating an ``openfermion.QubitOperator``.
+        """Serializes a PennyLane observable to a string compatible with the
+        openfermion.QubitOperator class.
 
         This method decomposes an observable into a sum of Pauli terms and
         identities, if needed.
