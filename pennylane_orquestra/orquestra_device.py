@@ -154,7 +154,14 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         return self._backend_specs
 
     def create_backend_specs(self):
-        """Create the backend specifications based on the device options.
+        """Create the backend specifications as a dictionary based on the
+        device options.
+
+        Backend specifications are dictionaries submitted in a serialized json
+        string format to Orquestra to specify which ``QuantumBackend`` to run
+        quantum circuits on. Data specified include details such as the name of
+        the external framework, the exact device to be used when several
+        availabe, the number of samples to obtain (if not exact computation).
 
         Returns:
             dict: the backend specifications represented as a dictionary
