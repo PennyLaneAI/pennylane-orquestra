@@ -60,10 +60,9 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             'q1', 'q2']``). Default 1 if not specified.
         shots (int): number of circuit evaluations/random samples used to estimate
             expectation values of observables
-        analytic (bool): If ``True``, the device calculates probability,
-            expectation values, and variances analytically. If ``False``, a finite
-            number of samples set by the argument ``shots`` are used to estimate
-            these quantities.
+        analytic (bool): If ``True``, the device calculates expectation values
+            analytically. If ``False``, a finite number of samples set by the
+            argument ``shots`` are used to estimate these quantities.
 
     Keyword Args:
         backend=None (str): the Orquestra backend device to use for the
@@ -74,13 +73,13 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             generated during the circuit execution should be kept or deleted.
         resources=None (dict): An option for Orquestra, specifies the resources
             provisioned for the clusters running each workflow step.
-        timeout=300 (int): The time until a job should timeout after getting no
+        timeout=300 (int): The maximum time until a job will timeout after getting no
             response from Orquestra (in seconds).
     """
 
     name = "Orquestra base device for PennyLane"
     short_name = "orquestra.base"
-    pennylane_requires = ">=0.11.0"
+    pennylane_requires = ">=0.13.0"
     version = __version__
     author = "Xanadu"
 
@@ -114,7 +113,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     observables = {"PauliX", "PauliY", "PauliZ", "Identity", "Hadamard"}
 
-    def __init__(self, wires, shots=1000, analytic=True, **kwargs):
+    def __init__(self, wires, shots=10000, analytic=True, **kwargs):
         super().__init__(wires=wires, shots=shots, analytic=analytic)
 
         self.backend = kwargs.get("backend", None)
@@ -154,7 +153,14 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         return self._backend_specs
 
     def create_backend_specs(self):
-        """Create the backend specifications based on the device options.
+        """Create the backend specifications as a dictionary based on the
+        device options.
+
+        Backend specifications are dictionaries submitted in a serialized json
+        string format to Orquestra to specify which ``QuantumBackend`` to run
+        quantum circuits on. Data specified include details such as the name of
+        the external framework, the exact device to be used when several
+        availabe, the number of samples to obtain (if not exact computation).
 
         Returns:
             dict: the backend specifications represented as a dictionary
@@ -263,7 +269,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         OpenFermion operator.
 
         Args:
-            observable (~.Observable): the observable to get the operator
+            observable (pennylane.operation.Observable): the observable to get the operator
                 representation for
 
         Returns:
@@ -280,7 +286,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     @staticmethod
     def pauliz_operator_string(wires):
-        """Creates an OpenFermion operator string based on the related wires
+        """Creates an OpenFermion operator string based on the measured wires
         that can be passed when creating an ``openfermion.IsingOperator``.
 
         This method is used if rotations are needed for the backend specified.
@@ -312,8 +318,8 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         return op_str
 
     def qubit_operator_string(self, observable):
-        """Creates an OpenFermion operator string from an observable that can
-        be passed when creating an ``openfermion.QubitOperator``.
+        """Serializes a PennyLane observable to a string compatible with the
+        openfermion.QubitOperator class.
 
         This method decomposes an observable into a sum of Pauli terms and
         identities, if needed.
