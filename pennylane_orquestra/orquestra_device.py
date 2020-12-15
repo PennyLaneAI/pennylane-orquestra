@@ -270,7 +270,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         OpenFermion operator.
 
         Args:
-            observable (~.Observable): the observable to get the operator
+            observable (pennylane.operation.Observable): the observable to get the operator
                 representation for
 
         Returns:
