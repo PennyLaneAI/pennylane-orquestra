@@ -152,7 +152,7 @@ class TestSerializeCircuit:
 mx = np.diag(np.array([1, 2, 3, 4]))
 
 obs_serialize = [
-    # Don't decomposition
+    # Don't decompose
     (qml.Identity(wires=[0]), "1 []"),
     (qml.PauliX(wires=[0]), "1 [X0]"),
     (qml.PauliY(wires=[0]), "1 [Y0]"),
