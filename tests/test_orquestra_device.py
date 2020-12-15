@@ -32,6 +32,7 @@ from conftest import (
 
 qiskit_analytic_specs = '{"module_name": "qeqiskit.simulator", "function_name": "QiskitSimulator", "device_name": "statevector_simulator"}'
 qiskit_sampler_specs = '{"module_name": "qeqiskit.simulator", "function_name": "QiskitSimulator", "device_name": "statevector_simulator", "n_samples": 1000}'
+forest_noisy_specs = '{"module_name": "qeforest.simulator", "function_name": "ForestSimulator", "device_name": "3q-noisy-qvm", "n_samples": 10000}'
 ibmq_specs = '{"module_name": "qeqiskit.backend", "function_name": "QiskitBackend", "device_name": "ibmq_qasm_simulator", "n_samples": 1000, "api_token": "Some token"}'
 
 
@@ -99,6 +100,11 @@ class TestCreateBackendSpecs:
             "orquestra.qiskit", backend="statevector_simulator", wires=1, shots=1000, analytic=False
         )
         assert dev.backend_specs == qiskit_sampler_specs
+
+    def test_backend_specs_forest_noisy_qvm(self):
+        """Test that the backend specs are created well for a Forest noisy QVM device"""
+        dev = qml.device('orquestra.forest', backend="3q-noisy-qvm", shots=10000, wires=3)
+        assert dev.backend_specs == forest_noisy_specs
 
     def test_backend_specs_ibmq(self):
         dev = qml.device(
