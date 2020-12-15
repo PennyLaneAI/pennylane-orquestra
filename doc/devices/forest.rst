@@ -35,7 +35,7 @@ Backends
 ~~~~~~~~
 
 By default, the ``orquestra.forest`` device uses the
-``'wavefunction-simulator'`` backend, but this may be changed to other hardware
+``'wavefunction-simulator'`` backend, but this may be changed to hardware
 simulators like ``'3q-noisy-qvm'``.  For more information on available
 backends, please visit the `Orquestra interfaces documentation
 <http://docs.orquestra.io/other-resources/interfaces/>`_.
