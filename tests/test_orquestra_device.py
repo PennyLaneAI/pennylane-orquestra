@@ -84,6 +84,111 @@ class TestBaseDevice:
 
         assert dev.apply([]) is None
 
+    @pytest.mark.parametrize("keep", [True, False])
+    def test_keep_workflow_file(self, keep, tmpdir, monkeypatch):
+        """Test the option for keeping/deleting the workflow file."""
+
+        file_name = "test_workflow.yaml"
+        dev = qml.device("orquestra.forest", wires=3, keep_files=keep)
+        mock_res_dict = {"First": {"expval": {"list": [123456789]}}}
+        test_uuid = "1234"
+
+        assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}.yaml"))
+        assert not dev.filenames
+        with monkeypatch.context() as m:
+            m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: mock_res_dict,
+            )
+
+            # Disable random uuid generation
+            m.setattr(uuid, "uuid4", lambda *args: test_uuid)
+
+            @qml.qnode(dev)
+            def circuit():
+                qml.PauliX(0)
+                return qml.expval(qml.PauliZ(0))
+
+            assert circuit() == 123456789
+            file_kept = os.path.exists(tmpdir.join(f"expval-{test_uuid}.yaml"))
+            assert file_kept if keep else not file_kept
+            assert dev.filenames == ([f"expval-{test_uuid}.yaml"] if keep else [])
+            assert dev.latest_id == "SomeWorkflowID"
+
+    @pytest.mark.parametrize("timeout", [1, 2.5])
+    def test_timeout(self, timeout, tmpdir, monkeypatch):
+        """Test the option for keeping/deleting the workflow file."""
+
+        file_name = "test_workflow.yaml"
+        dev = qml.device("orquestra.forest", wires=3, timeout=timeout)
+        mock_res_dict = {"First": {"expval": {"list": [123456789]}}}
+
+        test_uuid = "1234"
+        assert dev._timeout == timeout
+        assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}.yaml"))
+        with monkeypatch.context() as m:
+            m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
+            m.setattr(pennylane_orquestra.cli_actions, "workflow_results", lambda *args: "Test res")
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+
+            # Disable random uuid generation
+            m.setattr(uuid, "uuid4", lambda *args: test_uuid)
+
+            @qml.qnode(dev)
+            def circuit():
+                qml.PauliX(0)
+                return qml.expval(qml.PauliZ(0))
+
+            start = time.time()
+            with pytest.raises(TimeoutError, match="The workflow results for workflow"):
+                circuit()
+            end = time.time()
+            assert end - start >= timeout
+
+    @pytest.mark.parametrize("resources", [None, resources_default])
+    def test_got_resources(self, resources, monkeypatch):
+        """Test that the resource details defined when the device was created
+        are passed to generate the workflow."""
+        dev = qml.device("orquestra.qiskit", wires=2, resources=resources)
+        recorder = []
+        mock_res_dict = {"First": {"expval": {"list": [123456789]}}}
+
+        with monkeypatch.context() as m:
+
+            # Record the resources that were passed
+            get_resources_passed = lambda *args, **kwargs: recorder.append(
+                kwargs.get("resources", False)
+            )
+            m.setattr(
+                pennylane_orquestra.orquestra_device, "gen_expval_workflow", get_resources_passed
+            )
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: mock_res_dict,
+            )
+
+            @qml.qnode(dev)
+            def circuit():
+                qml.PauliX(0)
+                return qml.expval(qml.PauliZ(0))
+
+            assert circuit() == 123456789
+
+            # Check that the resorces were passed correctly
+            assert len(recorder) == 1
+            assert recorder[0] == resources
+
 class TestCreateBackendSpecs:
     """Test the create_backend_specs function"""
 
@@ -291,3 +396,380 @@ class TestSerializeOperator:
                 match="Operation PauliZ applied to invalid wire",
             ):
                 circuit()
+
+class TestExecute:
+    """Tests for the execute method of the base OrquestraDevice class."""
+
+    def test_serialize_circuit_rotations_tape(self, monkeypatch, tmpdir, test_batch_result):
+        """Test that a circuit that is serialized correctly with rotations for
+        a remote hardware backend in tape mode"""
+        qml.enable_tape()
+        dev = QeQiskitDevice(wires=1, shots=1000, backend="qasm_simulator", analytic=False)
+
+        circuit_history = []
+
+        with qml.tape.QuantumTape() as tape1:
+            qml.Hadamard(wires=[0])
+            qml.expval(qml.Hadamard(0))
+
+        with monkeypatch.context() as m:
+            m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "gen_expval_workflow",
+                lambda component, backend_specs, circuits, operators, **kwargs: circuit_history.extend(
+                    circuits
+                ),
+            )
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: test_batch_result,  # The exact results are not considered in the test
+            )
+
+            dev.execute(tape1)
+
+        expected = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[1];\ncreg c[1];\nh q[0];\nry(-0.7853981633974483) q[0];\n'
+        assert circuit_history[0] == expected
+        qml.disable_tape()
+
+    def test_serialize_circuit_no_rotations_tape(self, monkeypatch, tmpdir, test_batch_result):
+        """Test that a circuit that is serialized correctly without rotations for
+        a simulator backend in tape mode"""
+        qml.enable_tape()
+        dev = QeQiskitDevice(wires=1, shots=1000, backend="statevector_simulator", analytic=True)
+
+        circuit_history = []
+
+        with qml.tape.QuantumTape() as tape1:
+            qml.Hadamard(wires=[0])
+            qml.expval(qml.Hadamard(0))
+
+        with monkeypatch.context() as m:
+            m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "gen_expval_workflow",
+                lambda component, backend_specs, circuits, operators, **kwargs: circuit_history.extend(
+                    circuits
+                ),
+            )
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: test_batch_result,  # The exact results are not considered in the test
+            )
+
+            dev.execute(tape1)
+
+        expected = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[1];\ncreg c[1];\nh q[0];\n'
+        assert circuit_history[0] == expected
+        qml.disable_tape()
+
+    @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
+    def test_identity_single(self, dev):
+        """Test computing the expectation value of the identity for a single return value."""
+        dev = qml.device(dev, wires=1)
+
+        @qml.qnode(dev)
+        def circuit():
+            qml.PauliX(0)
+            return qml.expval(qml.Identity(0))
+
+        assert circuit() == 1
+
+    @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
+    def test_identity_multiple(self, dev):
+        """Test computing the expectation value of the identity for multiple return values."""
+        dev = qml.device(dev, wires=2)
+
+        @qml.qnode(dev)
+        def circuit():
+            qml.PauliX(0)
+            return qml.expval(qml.Identity(0)), qml.expval(qml.Identity(1))
+
+        assert np.allclose(circuit(), np.ones(2))
+
+    @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
+    def test_identity_mixed(self, dev, monkeypatch, tmpdir, test_result):
+        """Test computing that computing the expectation value of the identity
+        and PauliZ returns an array of results."""
+        with monkeypatch.context() as m:
+            m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: test_result,  # The exact results are not considered in the test
+            )
+
+            dev = qml.device(dev, wires=2)
+
+            @qml.qnode(dev)
+            def circuit():
+                qml.PauliX(0)
+                return qml.expval(qml.Identity(0)), qml.expval(qml.PauliZ(1))
+
+            res = circuit()
+            assert np.allclose(res, np.array([1, test_batch_res0]))
+
+class TestBatchExecute:
+    """Test the integration of the device with PennyLane."""
+
+    def test_error_if_not_expval_batched(self):
+        """Test that an error is raised if not an expectation value is
+        computed during batched execution"""
+        qml.enable_tape()
+        dev = qml.device("orquestra.qiskit", wires=2)
+
+        with qml.tape.QuantumTape() as tape1:
+            qml.expval(qml.PauliZ(wires=[0]))
+            qml.var(qml.PauliZ(wires=[0]))
+
+        with qml.tape.QuantumTape() as tape2:
+            qml.expval(qml.PauliZ(wires=[0]))
+
+        circuits = [tape1, tape2]
+        with pytest.raises(NotImplementedError):
+            res = dev.batch_execute(circuits)
+
+        qml.disable_tape()
+
+    @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
+    def test_identity_single_batched(self, dev):
+        """Test computing the expectation value of the identity for a single return value."""
+        qml.enable_tape()
+        dev = qml.device(dev, wires=1)
+
+        with qml.tape.QuantumTape() as tape1:
+            qml.expval(qml.Identity(wires=[0]))
+
+        res = dev.batch_execute([tape1])
+        assert len(res) == 1
+        assert np.allclose(res[0], np.array([1]))
+        qml.disable_tape()
+
+    @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
+    def test_identity_mixed(self, dev, monkeypatch, tmpdir, test_result):
+        """Test computing that computing the expectation value of a tape with
+        observables of identity and PauliZ and a tape where only the identity
+        of observable returns the correct list of results."""
+        with monkeypatch.context() as m:
+            m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: test_result,  # The exact results are not considered in the test
+            )
+
+            dev = qml.device(dev, wires=2)
+
+            with qml.tape.QuantumTape() as tape1:
+                qml.expval(qml.Identity(wires=[0]))
+                qml.expval(qml.PauliZ(wires=[1]))
+
+            with qml.tape.QuantumTape() as tape2:
+                qml.expval(qml.Identity(wires=[0]))
+
+            res = dev.batch_execute([tape1, tape2])
+
+            assert np.allclose(res[0], np.array([1, test_batch_res0]))
+            assert np.allclose(res[1], np.array([1]))
+
+    @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
+    def test_identity_multiple_batched(self, dev):
+        """Test computing the expectation value of the identity for multiple
+        return values."""
+        qml.enable_tape()
+        dev = qml.device(dev, wires=2)
+
+        with qml.tape.QuantumTape() as tape1:
+            qml.expval(qml.Identity(wires=[0]))
+            qml.expval(qml.Identity(wires=[1]))
+
+        res = dev.batch_execute([tape1])
+        assert len(res) == 1
+        assert np.allclose(res[0], np.array([1, 1]))
+        qml.disable_tape()
+
+    @pytest.mark.parametrize("keep", [True, False])
+    def test_batch_exec(self, keep, tmpdir, monkeypatch, test_batch_result):
+        """Test that the batch_execute method returns the desired result and
+        that the result preserves the order in which circuits were
+        submitted."""
+        qml.enable_tape()
+
+        dev = qml.device("orquestra.forest", wires=3, keep_files=keep)
+
+        with qml.tape.QuantumTape() as tape1:
+            qml.expval(qml.PauliZ(wires=[0]))
+
+        with qml.tape.QuantumTape() as tape2:
+            qml.RX(0.432, wires=0)
+            qml.RY(0.543, wires=0)
+            qml.expval(qml.PauliZ(wires=[0]))
+
+        with qml.tape.QuantumTape() as tape3:
+            qml.RX(0.432, wires=0)
+            qml.expval(qml.PauliZ(wires=[0]))
+
+        circuits = [tape1, tape2, tape3]
+
+        test_uuid = "1234"
+        assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}-0.yaml"))
+
+        with monkeypatch.context() as m:
+            m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: test_batch_result,
+            )
+
+            # Disable random uuid generation
+            m.setattr(uuid, "uuid4", lambda *args: test_uuid)
+
+            res = dev.batch_execute(circuits)
+
+            # Correct order of results is expected
+            assert np.allclose(res[0], test_batch_res0)
+            assert np.allclose(res[1], test_batch_res1)
+            assert np.allclose(res[2], test_batch_res2)
+            file_kept = os.path.exists(tmpdir.join(f"expval-{test_uuid}-0.yaml"))
+
+            assert file_kept if keep else not file_kept
+
+        qml.disable_tape()
+
+    @pytest.mark.parametrize("keep", [True, False])
+    @pytest.mark.parametrize(
+        "dev_name", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"]
+    )
+    def test_batch_exec_multiple_workflow(
+        self, keep, dev_name, tmpdir, monkeypatch, test_batch_result
+    ):
+        """Test that the batch_execute method returns the desired result and
+        that the result preserves the order in which circuits were submitted
+        when batches are created in multiple workflows ."""
+
+        qml.enable_tape()
+
+        with qml.tape.QuantumTape() as tape1:
+            qml.RX(0.133, wires=0)
+            qml.CNOT(wires=[0, 1])
+            qml.expval(qml.PauliZ(wires=[0]))
+
+        with qml.tape.QuantumTape() as tape2:
+            qml.RX(0.432, wires=0)
+            qml.RY(0.543, wires=0)
+            qml.expval(qml.PauliZ(wires=[0]))
+
+        with qml.tape.QuantumTape() as tape3:
+            qml.RX(0.432, wires=0)
+            qml.expval(qml.PauliZ(wires=[0]))
+
+        circuits = [tape1, tape2, tape3]
+
+        # Setting batch size: allow only a single circuit for each workflow
+        dev = qml.device(dev_name, wires=3, batch_size=1, keep_files=keep)
+
+        # Check that no workflow files were created before
+        test_uuid = "1234"
+        assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}-0.yaml"))
+        assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}-1.yaml"))
+        assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}-2.yaml"))
+
+        with monkeypatch.context() as m:
+            m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: test_batch_result,
+            )
+
+            # Disable random uuid generation
+            m.setattr(uuid, "uuid4", lambda *args: test_uuid)
+
+            res = dev.batch_execute(circuits)
+
+            # Correct order of results is expected
+            assert np.allclose(res[0], test_batch_res0)
+            assert np.allclose(res[1], test_batch_res1)
+            assert np.allclose(res[2], test_batch_res2)
+            file0_kept = os.path.exists(tmpdir.join(f"expval-{test_uuid}-0.yaml"))
+            file1_kept = os.path.exists(tmpdir.join(f"expval-{test_uuid}-1.yaml"))
+            file2_kept = os.path.exists(tmpdir.join(f"expval-{test_uuid}-2.yaml"))
+
+        # Check that workflow files were either all kept or all deleted
+        files_kept = file0_kept and file1_kept and file2_kept
+        assert files_kept and file0_kept if keep else not files_kept
+
+        qml.disable_tape()
+
+    @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
+    def test_identity_multiple_tape(self, dev, tmpdir, monkeypatch):
+        """Test computing the expectation value of the identity for multiple
+        return values."""
+        qml.enable_tape()
+
+        dev = qml.device(dev, wires=2, keep_files=False)
+
+        with qml.tape.QuantumTape() as tape1:
+            qml.RX(0.133, wires=0)
+            qml.expval(qml.Identity(wires=[0]))
+
+        with qml.tape.QuantumTape() as tape2:
+            qml.RX(0.432, wires=0)
+            qml.expval(qml.Identity(wires=[0]))
+            qml.expval(qml.Identity(wires=[1]))
+
+        circuits = [tape1, tape2]
+
+        test_uuid = "1234"
+        with monkeypatch.context() as m:
+            m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
+
+            # Disable submitting to the Orquestra platform by mocking Popen
+            m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: None,
+            )
+
+            # Disable random uuid generation
+            m.setattr(uuid, "uuid4", lambda *args: test_uuid)
+
+            res = dev.batch_execute(circuits)
+
+            # No workflow files were created because we only computed with
+            # identities
+            assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}.yaml"))
+            assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}.yaml"))
+
+            expected = [
+                np.ones(1),
+                np.ones(2),
+            ]
+
+            for r, e in zip(res, expected):
+                assert np.allclose(r, e)
+
+        qml.disable_tape()

@@ -196,6 +196,45 @@ step_name1 = "run-circuit-and-get-expval-1"
 step_name2 = "run-circuit-and-get-expval-2"
 
 @pytest.fixture()
+def test_batch_result():
+    """Example batch results used in tests.
+
+    The step names are not in order ("stepName" entry in each nested
+    dictionary), so that the order of results differs from the way they were
+    assumed to be submitted and ordering can be tested too.
+    """
+    test_batch_res = {
+        "expval-id2312": {
+            "expval": {
+                "list": [test_batch_res2],
+                "schema": "test",
+            },
+            "stepId": "expval",
+            "stepName": step_name2,
+            "workflowId": "expval",
+        },
+        "expval-id000": {
+            "expval": {
+                "list": [test_batch_res0],
+                "schema": "test",
+            },
+            "stepId": "expval",
+            "stepName": step_name0,
+            "workflowId": "expval",
+        },
+        "expval-id111": {
+            "expval": {
+                "list": [test_batch_res1],
+                "schema": "test",
+            },
+            "stepId": "expval",
+            "stepName": step_name1,
+            "workflowId": "expval",
+        },
+    }
+    return test_batch_res
+
+@pytest.fixture()
 def test_result():
     """Example test result for a workflow."""
     test_res = {
@@ -211,3 +250,13 @@ def test_result():
     }
 
     return test_res
+
+@pytest.fixture
+def token():
+    """Get the IBMQX token from an environment variable."""
+    t = os.getenv("IBMQX_TOKEN_TEST", None)
+
+    if t is None:
+        pytest.skip("Skipping test, no IBMQ token available")
+
+    return t
