@@ -49,10 +49,13 @@ Features
   including hardware devices like the IBM hardware accessible through the
   cloud.
 
+* Allows computing expectation values by submitting and processing Orquestra
+  workflows.
+
 * Supports a wide range of PennyLane operations.
 
-* Combine Orquestra's execution capabilities to submit batch of circuites
-  executed in parallel.
+* Combines Orquestra's execution capabilities to submit batches of circuits
+  that can be executed in parallel.
 
 .. installation-start-inclusion-marker-do-not-remove
 

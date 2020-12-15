@@ -9,7 +9,7 @@ This section contains the API documentation for the PennyLane-Orquestra plugin.
     to use these classes and functions directly.
 
     See the :doc:`overview </index>` page for more
-    details using the available Qiskit devices with PennyLane.
+    details using the available Orquestra devices with PennyLane.
 
 .. currentmodule:: pennylane_orquestra
 
