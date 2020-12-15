@@ -69,12 +69,12 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             specific Orquestra backend, if applicable
         batch_size=10 (int): the size of each circuit batch when using the
             :meth:`~.batch_execute` method to send multiple workflows
-        keep_files=False (bool): Whether or not the workflow files
-            generated during the circuit execution should be kept or deleted.
-        resources=None (dict): An option for Orquestra, specifies the resources
-            provisioned for the clusters running each workflow step.
-        timeout=300 (int): The maximum time until a job will timeout after getting no
-            response from Orquestra (in seconds).
+        keep_files=False (bool): whether or not the workflow files
+            generated during the circuit execution should be kept or deleted
+        resources=None (dict): an option for Orquestra, specifies the resources
+            provisioned for the clusters running each workflow step
+        timeout=300 (int): the maximum time until a job will timeout after getting no
+            response from Orquestra (in seconds)
     """
 
     name = "Orquestra base device for PennyLane"
