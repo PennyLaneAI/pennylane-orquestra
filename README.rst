@@ -70,7 +70,9 @@ client-side code:
 
 1. *Server-side*: the ``steps`` subfolder contains the functions used in
    generated workflows as steps and the ``src`` subfolder contains further
-   server-side auxiliary code (if any).
+   server-side auxiliary code (if any). Orquestra imports the ``main`` branch
+   of the ``pennylane-orquestra`` repository on each workflow submission, so
+   server-side changes merged into the ``main`` branch take effect immediately.
 
 2. *Client-side*: the ``pennylane_orquestra`` subfolder contains client-side
    code making up the PennyLane-Orquestra plugin.
