@@ -53,7 +53,7 @@ Device options
 
 The devices provided by the PennyLane-Orquestra plugin accept additional
 arguments beyond the PennyLane default device arguments. These are added to a
-base ``~.OrquestraDevice`` class.
+base :class:`~.OrquestraDevice` class.
 
 ``backend=None``
     The Orquestra backend device to use for the specific Orquestra backend, if
