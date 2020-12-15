@@ -42,7 +42,7 @@ class QeIBMQDevice(OrquestraDevice):
         if kwargs.get("analytic", None):
             # Raise a warning if the analytic attribute was set to True
             warnings.warn(
-                "The {self.short_name} device cannot be used in analytic "
+                f"The {self.short_name} device cannot be used in analytic "
                 "mode. Setting analytic to False, results are based on "
                 "sampling."
             )
