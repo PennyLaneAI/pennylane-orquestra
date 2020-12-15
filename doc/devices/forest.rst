@@ -1,5 +1,5 @@
-The Forest device
-=================
+Forest device
+=============
 The ``orquestra.forest`` device provided by the PennyLane-Orquestra plugin allows you to use PennyLane
 to deploy and run your quantum machine learning models on the backends and simulators provided
 by `Rigetti Forest SDK <https://pyquil-docs.rigetti.com/en/stable/>`_.
@@ -34,12 +34,12 @@ You can then execute the circuit like any other function to get the quantum mech
 Backends
 ~~~~~~~~
 
-The PennyLane-Orquestra Forest device has several backends, for example
-``'wavefunction-simulator'`` or hardware simulators like ``'3q-noisy-qvm'``.
-For more information on available backends, please visit the `Orquestra
-interfaces documentation
+By default, the ``orquestra.forest`` device uses the
+``'wavefunction-simulator'`` backend, but this may be changed to other hardware
+simulators like ``'3q-noisy-qvm'``.  For more information on available
+backends, please visit the `Orquestra interfaces documentation
 <http://docs.orquestra.io/other-resources/interfaces/>`_.
 
 .. code-block:: python
 
-    dev = qml.device('orquestra.forest', wires=2, backend='wavefunction-simulator')
+    dev = qml.device('orquestra.forest', wires=2, backend='3q-noisy-qvm')

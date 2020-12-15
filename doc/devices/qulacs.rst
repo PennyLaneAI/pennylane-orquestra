@@ -1,5 +1,5 @@
-The Qulacs device
-=================
+Qulacs device
+=============
 The ``orquestra.qulacs`` device provided by the PennyLane-Orquestra plugin
 allows you to use PennyLane to deploy and run your quantum machine learning
 models on the Qulacs simulator `Qulacs <https://github.com/qulacs/qulacs/>`_.

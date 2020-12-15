@@ -1,5 +1,5 @@
-The Qiskit device
-=================
+Qiskit device
+=============
 The ``orquestra.qiskit`` device provided by the PennyLane-Orquestra plugin allows you to use PennyLane
 to deploy and run your quantum machine learning models on the backends and simulators provided
 by `Qiskit Aer <https://qiskit.org/aer/>`_.
@@ -34,11 +34,13 @@ You can then execute the circuit like any other function to get the quantum mech
 Backends
 ~~~~~~~~
 
-Qiskit's Aer layer has several backends, for example ``'qasm_simulator'`` and
-``'statevector_simulator'``. For more information on backends, please visit the
-`Orquestra interfaces documentation <http://docs.orquestra.io/other-resources/interfaces/>`_.
+By default, the ``orquestra.qiskit`` device uses the noisy ``'qasm_simulator'``
+backend, but this may be changed to ``'statevector_simulator'``.  For more
+information on backends, please visit the `Orquestra interfaces documentation
+<http://docs.orquestra.io/other-resources/interfaces/>`_.
 
-You can change a ``'orquestra.qiskit'`` device's backend with the ``backend`` argument when creating the ``device``:
+You can change a ``'orquestra.qiskit'`` device's backend with the ``backend``
+argument when creating the ``device``:
 
 .. code-block:: python
 
