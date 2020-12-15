@@ -36,11 +36,11 @@ from pennylane_orquestra.utils import _terms_to_qubit_operator_string
 class OrquestraDevice(QubitDevice, abc.ABC):
     """The Orquestra base device.
 
-    Provides the ``~.execute`` and ``~.batch_execute`` methods which allows
+    Provides the :meth:`~.execute` and :meth:`~.batch_execute` methods which allows
     remote device executions by generating, submitting Orquestra workflows and
     processing their results.
 
-    The ``~.batch_execute`` method can be utilized to send workflows that
+    The :meth:`~.batch_execute` method can be utilized to send workflows that
     contain several circuits which are computed in parallel on a remote device.
 
     The workflow files generated are placed into a user specific data folder
@@ -69,7 +69,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         backend=None (str): the Orquestra backend device to use for the
             specific Orquestra backend, if applicable
         batch_size=10 (int): the size of each circuit batch when using the
-            ``~.batch_execute`` method to send multiple workflows
+            :meth:`~.batch_execute` method to send multiple workflows
         keep_files=False (bool): Whether or not the workflow files
             generated during the circuit execution should be kept or deleted.
         resources=None (dict): An option for Orquestra, specifies the resources
