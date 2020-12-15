@@ -35,29 +35,9 @@ Backends
 ~~~~~~~~
 
 The PennyLane-Orquestra Forest device has several backends, for example
-``'wavefunction-simulator'`` and ``'numpywavefunction-simulator'``. For
-more information on backends, please visit the `Aer provider documentation
-<https://forest.org/documentation/apidoc/aer_provider.html>`_.
-
-
-To get a current overview what backends are available you can query
-
-.. code-block:: python
-
-    dev.capabilities()['backend']
-
-or, alternatively,
-
-.. code-block:: python
-
-    from forest import Aer
-    Aer.backends()
-
-.. note::
-
-    Currently, PennyLane does not support the ``'pulse_simulator'`` backend.
-
-You can change a ``'orquestra.forest'`` device's backend with the ``backend`` argument when creating the ``device``:
+``'wavefunction-simulator'`` or hardware simulators like ``'3q-noisy-qvm'``.
+For more information on backends, please visit the `Orquestra interfaces
+documentation <http://docs.orquestra.io/other-resources/interfaces/>`_.
 
 .. code-block:: python
 
