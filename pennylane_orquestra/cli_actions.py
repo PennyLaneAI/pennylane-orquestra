@@ -186,9 +186,11 @@ def loop_until_finished(workflow_id, timeout=300):
         if time.time() - start > timeout:
             current_status = workflow_details(workflow_id)
             raise TimeoutError(
-                f"The workflow results for workflow "
+                "The workflow results for workflow "
                 f"{workflow_id} were not obtained after {timeout/60} minutes. "
-                f"{current_status}"
+                "The amount of timeout can be adjusted by specifying the "
+                "'timeout' keyword argument. "
+                f"{''.join(current_status)}"
             )
 
         if tries % 20 == 0:
