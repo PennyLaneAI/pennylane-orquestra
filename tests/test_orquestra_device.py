@@ -62,6 +62,17 @@ class TestBaseDevice:
 
         assert not dev.analytic
 
+    def test_statevector_simulator_single_shot_warning(self):
+        """Test that a warning is raised when using the QeQiskitDevice with the
+        statevector_simulator backend in sampling mode that the shots=1."""
+        with pytest.warns(
+            Warning,
+            match="shots=1",
+        ):
+            dev = qml.device("orquestra.qiskit", backend="statevector_simulator", wires=2, analytic=False)
+
+        assert not dev.analytic
+
     def test_ibmq_analytic_warning(self):
         """Test that a warning is raised when using the IBMQDevice in analytic
         mode and that we'll switch to sampling mode."""
