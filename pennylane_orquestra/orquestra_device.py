@@ -287,7 +287,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     @staticmethod
     def pauliz_operator_string(wires):
-        """Creates an OpenFermion operator string based on the related wires
+        """Creates an OpenFermion operator string based on the measured wires
         that can be passed when creating an ``openfermion.IsingOperator``.
 
         This method is used if rotations are needed for the backend specified.
