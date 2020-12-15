@@ -80,7 +80,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     name = "Orquestra base device for PennyLane"
     short_name = "orquestra.base"
-    pennylane_requires = ">=0.11.0"
+    pennylane_requires = ">=0.13.0"
     version = __version__
     author = "Xanadu"
 
