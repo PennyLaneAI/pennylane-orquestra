@@ -61,7 +61,7 @@ base :class:`~.OrquestraDevice` class.
 
 ``batch_size=10``
     The size of each circuit batch when using the
-    ``OrquestraDevice.batch_execute`` method to send multiple workflows.
+    :meth:`~.OrquestraDevice.batch_execute` method to send multiple workflows.
 
 ``keep_files=False``
     Whether or not the workflow files generated during the circuit execution should
