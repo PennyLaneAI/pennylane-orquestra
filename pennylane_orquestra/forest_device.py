@@ -18,7 +18,7 @@ from pennylane_orquestra.orquestra_device import OrquestraDevice
 
 
 class QeForestDevice(OrquestraDevice):
-    """Orquestra device"""
+    """Orquestra Forest device"""
 
     short_name = "orquestra.forest"
 
