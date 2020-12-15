@@ -32,18 +32,19 @@ class QeIBMQDevice(OrquestraDevice):
 
     def __init__(self, wires, shots=1024, backend="ibmq_qasm_simulator", **kwargs):
 
-        self._token = os.getenv("IBMQX_TOKEN") or kwargs.get("ibmqx_token", None)
+        self._token = kwargs.get("ibmqx_token", None) or os.getenv("IBMQX_TOKEN")
 
         if self._token is None:
             raise ValueError(
                 "Please pass a valid IBMQX token to the device using the 'ibmqx_token' argument."
             )
 
-        if "analytic" in kwargs and kwargs["analytic"]:
+        if kwargs.get("analytic", None):
             # Raise a warning if the analytic attribute was set to True
             warnings.warn(
-                "The {self.short_name} device cannot be used in "
-                "analytic mode. Results are based on sampling."
+                "The {self.short_name} device cannot be used in analytic "
+                "mode. Setting analytic to False, results are based on "
+                "sampling."
             )
 
         kwargs["analytic"] = False

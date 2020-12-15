@@ -72,8 +72,10 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             ``~.batch_execute`` method to send multiple workflows
         keep_files=False (bool): Whether or not the workflow files
             generated during the circuit execution should be kept or deleted.
-        resources=None (dict): the resources to be specified for each workflow step
-        timeout=300 (int): seconds to wait until raising a TimeoutError
+        resources=None (dict): An option for Orquestra, specifies the resources
+            provisioned for the clusters running each workflow step.
+        timeout=300 (int): The time until a job should timeout after getting no
+            response from Orquestra (in seconds).
     """
 
     name = "Orquestra base device for PennyLane"
@@ -162,7 +164,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         backend_specs["function_name"] = self.qe_function_name
 
         if self.backend is not None:
-            # Only backends that have multiple backend need to specify one
+            # Only devices that allow multiple backends need to specify one
             # E.g., qe-qiskit
             backend_specs["device_name"] = self.backend
 
@@ -225,7 +227,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         """
         qasm_str = circuit.to_openqasm(rotations=not self.analytic)
 
-        qasm_without_measurements = re.sub("measure.*?;\n", "", qasm_str)
+        qasm_without_measurements = re.sub("measure.*?;\n?\s*", "", qasm_str)
         return qasm_without_measurements
 
     def process_observables(self, observables):
@@ -257,9 +259,8 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         return ops, identity_indices
 
     def serialize_operator(self, observable):
-        """
-        Serialize the observable specified for the circuit as an OpenFermion
-        operator.
+        """Serialize the observable specified for the circuit as an
+        OpenFermion operator.
 
         Args:
             observable (~.Observable): the observable to get the operator
@@ -304,6 +305,8 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             str: the ``openfermion.IsingOperator`` string representation
         """
         op_wires_but_last = [f"Z{w} " for w in wires[:-1]]
+
+        # No space after the last wire
         op_last_wire = f"Z{wires[-1]}"
         op_str = "".join(["[", *op_wires_but_last, op_last_wire, "]"])
         return op_str
@@ -341,7 +344,6 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             need_decomposition = observable.name not in accepted_obs
 
         if need_decomposition:
-
             original_observable = observable
 
             # Decompose the matrix of the observable
