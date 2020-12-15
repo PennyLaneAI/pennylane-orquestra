@@ -18,7 +18,7 @@ from pennylane_orquestra.orquestra_device import OrquestraDevice
 
 
 class QeQulacsDevice(OrquestraDevice):
-    """Orquestra device"""
+    """The Orquestra qulacs device"""
 
     short_name = "orquestra.qulacs"
 
