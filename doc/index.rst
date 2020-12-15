@@ -8,13 +8,14 @@ PennyLane-Orquestra Plugin
   :end-before: header-end-inclusion-marker-do-not-remove
 
 
-Once the PennyLane-Orquestra plugin is installed, the the Qiskit devices
-can be accessed straightaway in PennyLane, without the need to import new packages.
+Once the PennyLane-Orquestra plugin is installed, multiple devices offered by
+Orquestra can be accessed straightaway in PennyLane, without the need to import
+new packages.
 
 Devices
 ~~~~~~~
 
-Currently, there are three different devices available:
+There are four different devices available:
 
 .. devicegalleryitem::
     :name: 'orquestra.forest'
