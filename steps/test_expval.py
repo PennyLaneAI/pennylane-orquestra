@@ -160,7 +160,6 @@ class TestExpvalSampling:
         res = np.array(lst[0])
         assert np.allclose(res, np.array([np.cos(theta), np.cos(theta) * np.cos(phi)]), atol=tol)
 
-    @pytest.mark.xfail
     def test_hadamard_expectation_plugin_integration(self, backend_specs, monkeypatch):
         """Test that the expectation value of the Hadamard is computed
         correctly when integrating the step function with the plugin."""
