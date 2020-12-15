@@ -37,7 +37,7 @@ class QeIBMQDevice(OrquestraDevice):
 
     Keyword Args:
         ibmqx_token=None (str): the authentication token needed to run a job on
-            IBMQ which is submitted to Orquestra as part of the workflow
+            IBMQ
         analytic=False (bool): If ``True``, the device calculates expectation
             values analytically. If ``False``, a finite number of samples set by
             the argument ``shots`` are used to estimate these quantities. The IBMQ
