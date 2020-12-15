@@ -80,7 +80,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     name = "Orquestra base device for PennyLane"
     short_name = "orquestra.base"
-    pennylane_requires = ">=0.11.0"
+    pennylane_requires = ">=0.13.0"
     version = __version__
     author = "Xanadu"
 
@@ -270,7 +270,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         OpenFermion operator.
 
         Args:
-            observable (~.Observable): the observable to get the operator
+            observable (pennylane.operation.Observable): the observable to get the operator
                 representation for
 
         Returns:
@@ -287,7 +287,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     @staticmethod
     def pauliz_operator_string(wires):
-        """Creates an OpenFermion operator string based on the related wires
+        """Creates an OpenFermion operator string based on the measured wires
         that can be passed when creating an ``openfermion.IsingOperator``.
 
         This method is used if rotations are needed for the backend specified.
