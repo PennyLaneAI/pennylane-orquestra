@@ -18,7 +18,16 @@ from pennylane_orquestra.orquestra_device import OrquestraDevice
 
 
 class QeQulacsDevice(OrquestraDevice):
-    """Orquestra device"""
+    """The Orquestra Qulacs device.
+
+    Args:
+        wires (int, Iterable[Number, str]]): Number of subsystems represented
+            by the device, or iterable that contains unique labels for the
+            subsystems as numbers (i.e., ``[-1, 0, 2]``) or strings (``['ancilla',
+            'q1', 'q2']``). Default 1 if not specified.
+        shots (int): number of circuit evaluations/random samples used to estimate
+            expectation values of observables
+    """
 
     short_name = "orquestra.qulacs"
 

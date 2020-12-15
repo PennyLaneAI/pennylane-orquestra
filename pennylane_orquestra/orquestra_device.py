@@ -60,10 +60,9 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             'q1', 'q2']``). Default 1 if not specified.
         shots (int): number of circuit evaluations/random samples used to estimate
             expectation values of observables
-        analytic (bool): If ``True``, the device calculates probability,
-            expectation values, and variances analytically. If ``False``, a finite
-            number of samples set by the argument ``shots`` are used to estimate
-            these quantities.
+        analytic (bool): If ``True``, the device calculates expectation values
+            analytically. If ``False``, a finite number of samples set by the
+            argument ``shots`` are used to estimate these quantities.
 
     Keyword Args:
         backend=None (str): the Orquestra backend device to use for the
