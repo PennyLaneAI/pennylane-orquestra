@@ -28,7 +28,7 @@ class QeQiskitDevice(OrquestraDevice):
     qe_module_name = "qeqiskit.simulator"
     qe_function_name = "QiskitSimulator"
 
-    def __init__(self, wires, shots=1024, backend="qasm_simulator", **kwargs):
+    def __init__(self, wires, shots=10000, backend="qasm_simulator", **kwargs):
         if backend == "qasm_simulator":
             if kwargs.get("analytic", None):
                 # Raise a warning if the analytic attribute was set to True

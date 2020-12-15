@@ -26,5 +26,5 @@ class QeQulacsDevice(OrquestraDevice):
     qe_module_name = "qequlacs.simulator"
     qe_function_name = "QulacsSimulator"
 
-    def __init__(self, wires, shots=1024, **kwargs):
+    def __init__(self, wires, shots=10000, **kwargs):
         super().__init__(wires, shots=shots, **kwargs)

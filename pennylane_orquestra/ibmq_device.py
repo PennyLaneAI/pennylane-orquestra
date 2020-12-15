@@ -30,7 +30,7 @@ class QeIBMQDevice(OrquestraDevice):
     qe_module_name = "qeqiskit.backend"
     qe_function_name = "QiskitBackend"
 
-    def __init__(self, wires, shots=1024, backend="ibmq_qasm_simulator", **kwargs):
+    def __init__(self, wires, shots=8192, backend="ibmq_qasm_simulator", **kwargs):
 
         self._token = kwargs.get("ibmqx_token", None) or os.getenv("IBMQX_TOKEN")
 

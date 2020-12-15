@@ -26,7 +26,7 @@ class QeForestDevice(OrquestraDevice):
     qe_module_name = "qeforest.simulator"
     qe_function_name = "ForestSimulator"
 
-    def __init__(self, wires, shots=1024, backend="wavefunction-simulator", **kwargs):
+    def __init__(self, wires, shots=10000, backend="wavefunction-simulator", **kwargs):
         if "qvm" in backend:
             if kwargs.get("analytic", False):
                 # Raise a warning if the analytic attribute was set to True

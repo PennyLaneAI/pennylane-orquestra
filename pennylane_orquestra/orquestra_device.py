@@ -114,7 +114,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     observables = {"PauliX", "PauliY", "PauliZ", "Identity", "Hadamard"}
 
-    def __init__(self, wires, shots=1000, analytic=True, **kwargs):
+    def __init__(self, wires, shots=10000, analytic=True, **kwargs):
         super().__init__(wires=wires, shots=shots, analytic=analytic)
 
         self.backend = kwargs.get("backend", None)
