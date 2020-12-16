@@ -544,8 +544,8 @@ class TestExecute:
 
     @pytest.mark.parametrize("mock_res", [[], "res", {"a": 3}, {"a": []}])
     def test_wrong_result_format_single_step(self, mock_res, monkeypatch):
-        """Test that the resource details defined when the device was created
-        are passed to generate the workflow."""
+        """Test that if a result with unexpected format of a single-step
+        workflow is obtained then an error is raised."""
         dev = qml.device("orquestra.qiskit", wires=2)
 
         with monkeypatch.context() as m:
@@ -793,8 +793,8 @@ class TestBatchExecute:
 
     @pytest.mark.parametrize("mock_res", [[], "res", {"a": 3}, {"a": []}])
     def test_wrong_result_format_multiple_steps(self, mock_res, monkeypatch):
-        """Test that the resource details defined when the device was created
-        are passed to generate the workflow."""
+        """Test that if a result of a multi-step workflow with unexpected
+        format is obtained then an error is raised."""
         dev = qml.device("orquestra.qiskit", wires=2)
 
         with monkeypatch.context() as m:
