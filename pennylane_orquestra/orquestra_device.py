@@ -516,14 +516,14 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             batch = circuits[idx:end_idx]
             file_id = f"{file_prefix}-{str(idx)}"
 
-            res = self._batch_execute(batch, file_id, **kwargs)
+            res = self.multi_step_execute(batch, file_id, **kwargs)
 
             results.extend(res)
             idx += self._batch_size
 
         return results
 
-    def _batch_execute(self, circuits, file_id, **kwargs):
+    def multi_step_execute(self, circuits, file_id, **kwargs):
         """Creates a multi-step workflow for executing a batch of circuits.
 
         Args:
