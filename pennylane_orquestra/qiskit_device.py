@@ -52,7 +52,7 @@ class QeQiskitDevice(OrquestraDevice):
                 # Raise a warning if the analytic attribute was set to True
                 warnings.warn(
                     f"The {self.short_name} device cannot be used in analytic "
-                    "mode with the {backend} backend. Setting analytic to False. "
+                    f"mode with the {backend} backend. Setting analytic to False. "
                     "Results are based on sampling."
                 )
 
