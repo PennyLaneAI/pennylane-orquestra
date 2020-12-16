@@ -116,7 +116,6 @@ devices = [
     ("orquestra.forest", "wavefunction-simulator", True),
     ("orquestra.forest", "wavefunction-simulator", False),
     ("orquestra.qiskit", "statevector_simulator", True),
-    ("orquestra.qiskit", "statevector_simulator", False),
     ("orquestra.qiskit", "qasm_simulator", False),
 ]
 
