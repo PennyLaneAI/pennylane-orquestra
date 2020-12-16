@@ -30,8 +30,6 @@ from pennylane_orquestra import OrquestraDevice, QeQiskitDevice, QeIBMQDevice
 import pennylane_orquestra.gen_workflow as gw
 from pennylane_orquestra.cli_actions import qe_submit, workflow_details
 
-from qiskit import IBMQ
-
 from conftest import (
     qe_list_workflow,
     backend_specs_default,

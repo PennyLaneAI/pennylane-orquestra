@@ -15,6 +15,7 @@
 The Forest device class for PennyLane-Orquestra.
 """
 from pennylane_orquestra.orquestra_device import OrquestraDevice
+import warnings
 
 
 class QeForestDevice(OrquestraDevice):

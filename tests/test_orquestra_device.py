@@ -31,10 +31,14 @@ from conftest import (
 )
 
 qiskit_analytic_specs = '{"module_name": "qeqiskit.simulator", "function_name": "QiskitSimulator", "device_name": "statevector_simulator"}'
-qiskit_sampler_specs = '{"module_name": "qeqiskit.simulator", "function_name": "QiskitSimulator", "device_name": "statevector_simulator", "n_samples": 1000}'
+qiskit_sampler_specs = '{"module_name": "qeqiskit.simulator", "function_name": "QiskitSimulator", "device_name": "qasm_simulator", "n_samples": 1000}'
 forest_noisy_specs = '{"module_name": "qeforest.simulator", "function_name": "ForestSimulator", "device_name": "3q-noisy-qvm", "n_samples": 10000}'
 ibmq_specs = '{"module_name": "qeqiskit.backend", "function_name": "QiskitBackend", "device_name": "ibmq_qasm_simulator", "n_samples": 1000, "api_token": "Some token"}'
 
+non_analytic_backends = [
+        ("orquestra.qiskit", "qasm_simulator"),
+        ("orquestra.forest", "3q-noisy-qvm")
+]
 
 class TestBaseDevice:
     """Test the Orquestra base device"""
@@ -50,7 +54,8 @@ class TestBaseDevice:
         with pytest.raises(NotImplementedError):
             circuit()
 
-    def test_qasm_simulator_analytic_warning(self):
+    @pytest.mark.parametrize("dev,backend", non_analytic_backends)
+    def test_qasm_simulator_analytic_warning(self, dev,backend):
         """Test that a warning is raised when using the QeQiskitDevice with the
         qasm_simulator backend in analytic mode and that we'll switch to
         sampling mode."""
@@ -58,7 +63,7 @@ class TestBaseDevice:
             Warning,
             match="cannot be used in analytic",
         ):
-            dev = qml.device("orquestra.qiskit", backend="qasm_simulator", wires=2, analytic=True)
+            dev = qml.device(dev, backend=backend, wires=2, analytic=True)
 
         assert not dev.analytic
 
@@ -213,7 +218,7 @@ class TestCreateBackendSpecs:
     def test_backend_specs_sampling(self):
         """Test that the backend specs are created well for a sampling device"""
         dev = qml.device(
-            "orquestra.qiskit", backend="statevector_simulator", wires=1, shots=1000, analytic=False
+            "orquestra.qiskit", backend="qasm_simulator", wires=1, shots=1000, analytic=False
         )
         assert dev.backend_specs == qiskit_sampler_specs
 
