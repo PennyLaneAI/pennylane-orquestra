@@ -80,7 +80,7 @@ client-side code:
 Installation and tests
 ~~~~~~~~~~~~~~~~~~~~~~
 
-This plugin requires Python version 3.6 and above, as well as PennyLane and the `Quantum Engine CLI <https://github.com/zapatacomputing/qe-cli>`_ are required .
+This plugin requires Python version 3.6 and above. PennyLane and the `Quantum Engine CLI <https://github.com/zapatacomputing/qe-cli>`_ are also required.
 Installation of this plugin, as well as all dependencies, can be done using ``pip``:
 
 .. code-block:: bash
