@@ -544,7 +544,8 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             self.check_validity(circuit.operations, circuit.observables)
 
         # 1. Create qasm strings from the circuits
-        # Extract the CircuitGraph object from QuantumTape
+        # Extract the CircuitGraph object from QuantumTape (batch_execute only
+        # support tapes)
         circuits = [circ.graph for circ in circuits]
         qasm_circuits = [self.serialize_circuit(circuit) for circuit in circuits]
 
