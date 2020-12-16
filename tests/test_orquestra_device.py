@@ -19,9 +19,8 @@ import time
 import numpy as np
 
 import pennylane as qml
-import pennylane.tape
 import pennylane_orquestra
-from pennylane_orquestra import OrquestraDevice, QeQiskitDevice, QeIBMQDevice
+from pennylane_orquestra import QeQiskitDevice
 from conftest import (
     test_batch_res0,
     test_batch_res1,
@@ -429,7 +428,6 @@ class TestExecute:
     def test_serialize_circuit_rotations_tape(self, monkeypatch, tmpdir, test_batch_result):
         """Test that a circuit that is serialized correctly with rotations for
         a remote hardware backend in tape mode"""
-        qml.enable_tape()
         dev = QeQiskitDevice(wires=1, shots=1000, backend="qasm_simulator", analytic=False)
 
         circuit_history = []
@@ -460,12 +458,10 @@ class TestExecute:
 
         expected = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[1];\ncreg c[1];\nh q[0];\nry(-0.7853981633974483) q[0];\n'
         assert circuit_history[0] == expected
-        qml.disable_tape()
 
     def test_serialize_circuit_no_rotations_tape(self, monkeypatch, tmpdir, test_batch_result):
         """Test that a circuit that is serialized correctly without rotations for
         a simulator backend in tape mode"""
-        qml.enable_tape()
         dev = QeQiskitDevice(wires=1, shots=1000, backend="statevector_simulator", analytic=True)
 
         circuit_history = []
@@ -496,7 +492,6 @@ class TestExecute:
 
         expected = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[1];\ncreg c[1];\nh q[0];\n'
         assert circuit_history[0] == expected
-        qml.disable_tape()
 
     @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
     def test_identity_single(self, dev):
@@ -567,14 +562,12 @@ class TestExecute:
             with pytest.raises(ValueError, match="Unexpected result format"):
                 dev.single_step_results("SomeID")
 
-
 class TestBatchExecute:
     """Test the integration of the device with PennyLane."""
 
     def test_error_if_not_expval_batched(self):
         """Test that an error is raised if not an expectation value is
         computed during batched execution"""
-        qml.enable_tape()
         dev = qml.device("orquestra.qiskit", wires=2)
 
         with qml.tape.QuantumTape() as tape1:
@@ -588,12 +581,9 @@ class TestBatchExecute:
         with pytest.raises(NotImplementedError):
             res = dev.batch_execute(circuits)
 
-        qml.disable_tape()
-
     @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
     def test_identity_single_batched(self, dev):
         """Test computing the expectation value of the identity for a single return value."""
-        qml.enable_tape()
         dev = qml.device(dev, wires=1)
 
         with qml.tape.QuantumTape() as tape1:
@@ -602,7 +592,6 @@ class TestBatchExecute:
         res = dev.batch_execute([tape1])
         assert len(res) == 1
         assert np.allclose(res[0], np.array([1]))
-        qml.disable_tape()
 
     @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
     def test_identity_mixed(self, dev, monkeypatch, tmpdir, test_result):
@@ -638,7 +627,6 @@ class TestBatchExecute:
     def test_identity_multiple_batched(self, dev):
         """Test computing the expectation value of the identity for multiple
         return values."""
-        qml.enable_tape()
         dev = qml.device(dev, wires=2)
 
         with qml.tape.QuantumTape() as tape1:
@@ -648,15 +636,12 @@ class TestBatchExecute:
         res = dev.batch_execute([tape1])
         assert len(res) == 1
         assert np.allclose(res[0], np.array([1, 1]))
-        qml.disable_tape()
 
     @pytest.mark.parametrize("keep", [True, False])
     def test_batch_exec(self, keep, tmpdir, monkeypatch, test_batch_result):
         """Test that the batch_execute method returns the desired result and
         that the result preserves the order in which circuits were
         submitted."""
-        qml.enable_tape()
-
         dev = qml.device("orquestra.forest", wires=3, keep_files=keep)
 
         with qml.tape.QuantumTape() as tape1:
@@ -700,8 +685,6 @@ class TestBatchExecute:
 
             assert file_kept if keep else not file_kept
 
-        qml.disable_tape()
-
     @pytest.mark.parametrize("keep", [True, False])
     @pytest.mark.parametrize(
         "dev_name", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"]
@@ -712,9 +695,6 @@ class TestBatchExecute:
         """Test that the batch_execute method returns the desired result and
         that the result preserves the order in which circuits were submitted
         when batches are created in multiple workflows ."""
-
-        qml.enable_tape()
-
         with qml.tape.QuantumTape() as tape1:
             qml.RX(0.133, wires=0)
             qml.CNOT(wires=[0, 1])
@@ -768,14 +748,10 @@ class TestBatchExecute:
         files_kept = file0_kept and file1_kept and file2_kept
         assert files_kept and file0_kept if keep else not files_kept
 
-        qml.disable_tape()
-
     @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
     def test_identity_multiple_tape(self, dev, tmpdir, monkeypatch):
         """Test computing the expectation value of the identity for multiple
         return values."""
-        qml.enable_tape()
-
         dev = qml.device(dev, wires=2, keep_files=False)
 
         with qml.tape.QuantumTape() as tape1:
@@ -814,8 +790,6 @@ class TestBatchExecute:
 
             for r, e in zip(res, expected):
                 assert np.allclose(r, e)
-
-        qml.disable_tape()
 
     @pytest.mark.parametrize("mock_res", [[], "res", {"a": 3}, {"a": []}])
     def test_wrong_result_format_multiple_steps(self, mock_res, monkeypatch):

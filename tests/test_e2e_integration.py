@@ -167,7 +167,7 @@ class TestOrquestraIntegration:
 
         assert np.allclose(circuit(), np.array([1, -1, 1]))
 
-    def test_jacobian_withmulti_step_execute(self):
+    def test_jacobian_with_multi_step_execute(self, tape_mode):
         """Test that the value of the jacobian computed using the internal
         batch_execute method corresponds to the value computed with
         the default.qubit device.
@@ -179,8 +179,6 @@ class TestOrquestraIntegration:
 
         if need_login_msg in try_resp:
             pytest.skip("Has not logged in to the Orquestra platform.")
-
-        qml.enable_tape()
 
         # Evaluate 12 circuits (2 * 1 * 3 * 2)
         # By default, this fits into two separate workflow files
@@ -211,7 +209,6 @@ class TestOrquestraIntegration:
         res_default_qubit = dfunc2(weights)
 
         assert np.allclose(res_orquestra, res_default_qubit)
-        qml.disable_tape()
 
 class TestOrquestraIBMQIntegration:
     def test_apply_x(self, token):
