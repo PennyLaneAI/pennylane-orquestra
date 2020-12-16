@@ -80,7 +80,7 @@ client-side code:
 Installation and tests
 ~~~~~~~~~~~~~~~~~~~~~~
 
-This plugin requires Python version 3.6 and above, as well as PennyLane and the `Quantum Engine CLI <https://github.com/zapatacomputing/qe-cli>`_ are required .
+This plugin requires Python version 3.6 and above. PennyLane and the `Quantum Engine CLI <https://github.com/zapatacomputing/qe-cli>`_ are also required.
 Installation of this plugin, as well as all dependencies, can be done using ``pip``:
 
 .. code-block:: bash
@@ -100,7 +100,7 @@ the end-to-end integration of the plugin can be run with ``make test-e2e``.
 
     Tests on the `IBMQ device
     <https://pennylaneorquestra.readthedocs.io/en/latest/devices/ibmq.html>`_
-    can only be run if an ``ibmqx_token`` is stored in the ``IBMQX_TOKEN_TEST``
+    can only be run if an IBM Q authentication token is available via the ``IBMQX_TOKEN_TEST``
     environment variable for the `IBM Q experience
     <https://quantum-computing.ibm.com/>`_.
 
@@ -170,7 +170,7 @@ A package for integrating PennyLane with Orquestra.
 
 **Installation**
 
-Installing [PennyLane](https://github.com/PennyLaneAI/pennylane) and the [Quantum Engine CLI](https://github.com/zapatacomputing/qe-cli) are required.
+Installing `PennyLane <https://github.com/PennyLaneAI/pennylane>`__ and the `Quantum Engine CLI <https://github.com/zapatacomputing/qe-cli>`__ are required.
 
-The package can be installed using `pip` and running `pip install -e .` from
-the `pennylane_orquestra` folder.
+The package can be installed using ``pip`` and running ``pip install -e .`` from
+the ``pennylane_orquestra`` folder.

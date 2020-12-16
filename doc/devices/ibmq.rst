@@ -1,7 +1,7 @@
 IBMQ device
 ===========
 PennyLane-Orquestra supports running PennyLane on IBM Q hardware via the ``qistkit.ibmq`` device.
-You can choose between different backends - either simulators tailor-made to emulate the real hardware,
+You can choose between different backends --- either simulators tailor-made to emulate the real hardware,
 or the real hardware itself.
 
 IBMQX Tokens
