@@ -472,7 +472,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             raise ValueError(
                 f"Unexpected result format for workflow {workflow_id}.\n "
                 "{''.join(current_status)}"
-            )
+            ) from e
         return results
 
     @staticmethod
