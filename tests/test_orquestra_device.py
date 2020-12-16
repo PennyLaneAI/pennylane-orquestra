@@ -114,7 +114,7 @@ class TestBaseDevice:
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -151,7 +151,7 @@ class TestBaseDevice:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
             m.setattr(pennylane_orquestra.cli_actions, "workflow_results", lambda *args: "Test res")
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
 
             # Disable random uuid generation
@@ -186,7 +186,7 @@ class TestBaseDevice:
                 pennylane_orquestra.orquestra_device, "gen_expval_workflow", get_resources_passed
             )
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -395,7 +395,7 @@ class TestSerializeOperator:
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -438,7 +438,7 @@ class TestExecute:
                 ),
             )
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -474,7 +474,7 @@ class TestExecute:
                 ),
             )
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -519,7 +519,7 @@ class TestExecute:
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -536,6 +536,23 @@ class TestExecute:
 
             res = circuit()
             assert np.allclose(res, np.array([1, test_batch_res0]))
+
+    @pytest.mark.parametrize("mock_res", [[], "res", {'a': 3}, {'a': []}])
+    def test_wrong_result_format_single_step(self, mock_res, monkeypatch):
+        """Test that the resource details defined when the device was created
+        are passed to generate the workflow."""
+        dev = qml.device("orquestra.qiskit", wires=2)
+
+        with monkeypatch.context() as m:
+            # Disable interacting with Orquestra
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: mock_res,
+            )
+
+            with pytest.raises(ValueError, match="Unexpected result format"):
+                dev.single_step_results("SomeID")
 
 class TestBatchExecute:
     """Test the integration of the device with PennyLane."""
@@ -581,7 +598,7 @@ class TestBatchExecute:
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -648,7 +665,7 @@ class TestBatchExecute:
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -712,7 +729,7 @@ class TestBatchExecute:
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -762,7 +779,7 @@ class TestBatchExecute:
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
 
-            # Disable submitting to the Orquestra platform by mocking Popen
+            # Disable submitting to Orquestra by mocking Popen
             m.setattr(subprocess, "Popen", lambda *args, **kwargs: MockPopen())
             m.setattr(
                 pennylane_orquestra.orquestra_device,
@@ -775,17 +792,30 @@ class TestBatchExecute:
 
             res = dev.batch_execute(circuits)
 
-            # No workflow files were created because we only computed with
-            # identities
+            # No workflow files were created as only computed with identities
             assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}.yaml"))
             assert not os.path.exists(tmpdir.join(f"expval-{test_uuid}.yaml"))
 
-            expected = [
-                np.ones(1),
-                np.ones(2),
-            ]
+            expected = [np.ones(1), np.ones(2)]
 
             for r, e in zip(res, expected):
                 assert np.allclose(r, e)
 
         qml.disable_tape()
+
+    @pytest.mark.parametrize("mock_res", [[], "res", {'a': 3}, {'a': []}])
+    def test_wrong_result_format_multiple_steps(self, mock_res, monkeypatch):
+        """Test that the resource details defined when the device was created
+        are passed to generate the workflow."""
+        dev = qml.device("orquestra.qiskit", wires=2)
+
+        with monkeypatch.context() as m:
+            # Disable interacting with Orquestra
+            m.setattr(
+                pennylane_orquestra.orquestra_device,
+                "loop_until_finished",
+                lambda *args, **kwargs: mock_res,
+            )
+
+            with pytest.raises(ValueError, match="Unexpected result format"):
+                dev.multiple_steps_results("SomeID")

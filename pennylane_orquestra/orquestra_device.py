@@ -28,7 +28,7 @@ from pennylane.utils import decompose_hamiltonian
 from pennylane.wires import Wires
 
 from pennylane_orquestra._version import __version__
-from pennylane_orquestra.cli_actions import loop_until_finished, qe_submit, write_workflow_file
+from pennylane_orquestra.cli_actions import loop_until_finished, qe_submit, write_workflow_file, workflow_details
 from pennylane_orquestra.gen_workflow import gen_expval_workflow
 from pennylane_orquestra.utils import _terms_to_qubit_operator_string
 
@@ -435,10 +435,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         self._latest_id = workflow_id
 
         # 7. Loop until finished
-        data = loop_until_finished(workflow_id, timeout=self._timeout)
-
-        # Assume that there's only one step
-        results = [v for k, v in data.items()][0]["expval"]["list"]
+        results = self.single_step_results(workflow_id)
 
         # Insert the theoretical value for the expectation value of the
         # identity operator
@@ -446,8 +443,31 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             results.insert(idx, 1)
 
         res = self._asarray(results)
-
         return res
+
+    def single_step_results(self, workflow_id):
+        """Extracts the results of a single step obtained for a workflow.
+
+        This method assumes that the workflow had a single step and that the
+        structure of the result corresponds to results sent by Orquestra API
+        v1.0.0.
+
+        Args:
+            workflow_id (str): the ID of the workflow to extract results for
+
+        Returns:
+            results (list): a list of workflow results
+        """
+        data = loop_until_finished(workflow_id, timeout=self._timeout)
+
+        try:
+            step_result = [v for k, v in data.items()][0]
+            results = step_result["expval"]["list"]
+        except (IndexError, KeyError, TypeError, AttributeError) as e:
+            current_status = workflow_details(workflow_id)
+            raise ValueError(f"Unexpected result format for workflow {workflow_id}.\n "
+                            "{''.join(current_status)}")
+        return results
 
     @staticmethod
     def insert_identity_res_batch(results, empty_obs_list, identity_indices):
@@ -573,19 +593,41 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             self._filenames.append(filename)
 
         # 6. Loop until finished
-        data = loop_until_finished(workflow_id, timeout=self._timeout)
-
-        # Due to parallel execution, results might have been written in any order
-        # Sort the results by the step name
-        get_step_name = lambda entry: entry[1]["stepName"]
-        data = dict(sorted(data.items(), key=get_step_name))
-
-        # There are multiple steps
-        # Obtain the results for each step
-        result_dicts = [v for k, v in data.items()]
-        results = [dct["expval"]["list"] for dct in result_dicts]
+        results = self.multiple_steps_results(workflow_id)
 
         results = self.insert_identity_res_batch(results, empty_obs_list, identity_indices)
         results = [self._asarray(res) for res in results]
 
+        return results
+
+    def multiple_steps_results(self, workflow_id):
+        """Extracts the results of multiple steps obtained for a workflow.
+
+        This method assumes that the workflow had multiple steps and that the
+        structure of the result corresponds to results sent by Orquestra API
+        v1.0.0.
+
+        Due to parallel execution, results might have been written in any
+        order, so results are sorted by the step name.
+
+        Args:
+            workflow_id (str): the ID of the workflow to extract results for
+
+        Returns:
+            results (list): a list of workflow results for each step
+        """
+        data = loop_until_finished(workflow_id, timeout=self._timeout)
+
+        try:
+            # Sort results by step name
+            get_step_name = lambda entry: entry[1]["stepName"]
+            data = dict(sorted(data.items(), key=get_step_name))
+
+            # Obtain the results for each step
+            result_dicts = [v for k, v in data.items()]
+            results = [dct["expval"]["list"] for dct in result_dicts]
+        except (IndexError, KeyError, TypeError, AttributeError) as e:
+            current_status = workflow_details(workflow_id)
+            raise ValueError(f"Unexpected result format for workflow {workflow_id}.\n "
+                            "{''.join(current_status)}")
         return results
