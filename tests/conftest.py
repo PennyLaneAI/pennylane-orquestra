@@ -85,9 +85,9 @@ first_name = "run-circuit-and-get-expval-0"
 first_config = {
     "runtime": {
         "language": "python3",
-        "imports": ["pl_orquestra", "z-quantum-core", "qe-openfermion", "qe-forest"],
+        "imports": ["pennylane_orquestra", "z-quantum-core", "qe-openfermion", "qe-forest"],
         "parameters": {
-            "file": "pl_orquestra/steps/expval.py",
+            "file": "pennylane_orquestra/steps/expval.py",
             "function": "run_circuit_and_get_expval",
         },
     }
@@ -110,9 +110,9 @@ second_name = "run-circuit-and-get-expval-1"
 second_config = {
     "runtime": {
         "language": "python3",
-        "imports": ["pl_orquestra", "z-quantum-core", "qe-openfermion", "qe-forest"],
+        "imports": ["pennylane_orquestra", "z-quantum-core", "qe-openfermion", "qe-forest"],
         "parameters": {
-            "file": "pl_orquestra/steps/expval.py",
+            "file": "pennylane_orquestra/steps/expval.py",
             "function": "run_circuit_and_get_expval",
         },
     }
@@ -139,14 +139,14 @@ steps = [first_step, second_step]
 
 types = ["circuit", "expval"]
 
-pl_orquestra_import = {
-    "name": "pl_orquestra",
+pennylane_orquestra_import = {
+    "name": "pennylane_orquestra",
     "type": "git",
-    "parameters": {"repository": "git@github.com:antalszava/pl_orquestra.git", "branch": "master"},
+    "parameters": {"repository": "git@github.com:PennyLaneAI/pennylane-orquestra.git", "branch": "main"},
 }
 
 imports_workflow = [
-    pl_orquestra_import,
+    pennylane_orquestra_import,
     {
         "name": "z-quantum-core",
         "type": "git",
