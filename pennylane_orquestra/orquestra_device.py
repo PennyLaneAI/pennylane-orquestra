@@ -464,7 +464,6 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             results (list): a list of workflow results
         """
         data = loop_until_finished(workflow_id, timeout=self._timeout)
-
         try:
             step_result = [v for k, v in data.items()][0]
             results = step_result["expval"]["list"]
@@ -624,7 +623,6 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             results (list): a list of workflow results for each step
         """
         data = loop_until_finished(workflow_id, timeout=self._timeout)
-
         try:
             # Sort results by step name
             get_step_name = lambda entry: entry[1]["stepName"]

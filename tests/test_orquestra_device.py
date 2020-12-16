@@ -36,9 +36,10 @@ forest_noisy_specs = '{"module_name": "qeforest.simulator", "function_name": "Fo
 ibmq_specs = '{"module_name": "qeqiskit.backend", "function_name": "QiskitBackend", "device_name": "ibmq_qasm_simulator", "n_samples": 1000, "api_token": "Some token"}'
 
 non_analytic_backends = [
-        ("orquestra.qiskit", "qasm_simulator"),
-        ("orquestra.forest", "3q-noisy-qvm")
+    ("orquestra.qiskit", "qasm_simulator"),
+    ("orquestra.forest", "3q-noisy-qvm"),
 ]
+
 
 class TestBaseDevice:
     """Test the Orquestra base device"""
@@ -55,7 +56,7 @@ class TestBaseDevice:
             circuit()
 
     @pytest.mark.parametrize("dev,backend", non_analytic_backends)
-    def test_qasm_simulator_analytic_warning(self, dev,backend):
+    def test_qasm_simulator_analytic_warning(self, dev, backend):
         """Test that a warning is raised when using the QeQiskitDevice with the
         qasm_simulator backend in analytic mode and that we'll switch to
         sampling mode."""
@@ -74,16 +75,16 @@ class TestBaseDevice:
             Warning,
             match="shots=1",
         ):
-            dev = qml.device("orquestra.qiskit", backend="statevector_simulator", wires=2, analytic=False)
+            dev = qml.device(
+                "orquestra.qiskit", backend="statevector_simulator", wires=2, analytic=False
+            )
 
         assert not dev.analytic
 
     def test_ibmq_analytic_warning(self):
         """Test that a warning is raised when using the IBMQDevice in analytic
         mode and that we'll switch to sampling mode."""
-        with pytest.warns(
-            Warning, match="cannot be used in analytic"
-        ):
+        with pytest.warns(Warning, match="cannot be used in analytic"):
             dev = qml.device("orquestra.ibmq", wires=2, analytic=True, ibmqx_token="Some token")
 
         assert not dev.analytic
@@ -205,6 +206,7 @@ class TestBaseDevice:
             assert len(recorder) == 1
             assert recorder[0] == resources
 
+
 class TestCreateBackendSpecs:
     """Test the create_backend_specs function"""
 
@@ -224,7 +226,7 @@ class TestCreateBackendSpecs:
 
     def test_backend_specs_forest_noisy_qvm(self):
         """Test that the backend specs are created well for a Forest noisy QVM device"""
-        dev = qml.device('orquestra.forest', backend="3q-noisy-qvm", shots=10000, wires=3)
+        dev = qml.device("orquestra.forest", backend="3q-noisy-qvm", shots=10000, wires=3)
         assert dev.backend_specs == forest_noisy_specs
 
     def test_backend_specs_ibmq(self):
@@ -310,12 +312,19 @@ serialize_needs_rot = [
 
 # More advanced examples for testing the correct wires
 obs_decomposed_wires_check = [
-    (qml.Hadamard(0), '0.7071067811865475 [X0] + 0.7071067811865475 [Z0]'),
-    (qml.Hadamard(2), '0.7071067811865475 [X2] + 0.7071067811865475 [Z2]'),
-    (qml.Hadamard(2) @ qml.Hadamard(1), '0.4999999999999999 [X2 X1] + 0.4999999999999999 [X2 Z1] + 0.4999999999999999 [Z2 X1] + 0.4999999999999999 [Z2 Z1]'),
-    (qml.Hermitian((qml.PauliY(1) @ qml.PauliX(0) @ qml.PauliZ(2)).matrix, wires=[1,0,2]), '1.0 [Y1 X0 Z2]'),
-    (qml.PauliY(2) @ qml.Hermitian((qml.PauliX(1)).matrix, wires=[1]), '1.0 [Y2 X1]')
+    (qml.Hadamard(0), "0.7071067811865475 [X0] + 0.7071067811865475 [Z0]"),
+    (qml.Hadamard(2), "0.7071067811865475 [X2] + 0.7071067811865475 [Z2]"),
+    (
+        qml.Hadamard(2) @ qml.Hadamard(1),
+        "0.4999999999999999 [X2 X1] + 0.4999999999999999 [X2 Z1] + 0.4999999999999999 [Z2 X1] + 0.4999999999999999 [Z2 Z1]",
+    ),
+    (
+        qml.Hermitian((qml.PauliY(1) @ qml.PauliX(0) @ qml.PauliZ(2)).matrix, wires=[1, 0, 2]),
+        "1.0 [Y1 X0 Z2]",
+    ),
+    (qml.PauliY(2) @ qml.Hermitian((qml.PauliX(1)).matrix, wires=[1]), "1.0 [Y2 X1]"),
 ]
+
 
 class TestSerializeOperator:
     """Test the serialize_operator function"""
@@ -376,7 +385,7 @@ class TestSerializeOperator:
     def test_decomposed_operator_correct_wires(self, obs, expected):
         """Test that the serialized form of observables that need decomposition
         match the correct wires."""
-        dev = qml.device('orquestra.qulacs', wires=3)
+        dev = qml.device("orquestra.qulacs", wires=3)
 
         res = dev.serialize_operator(obs)
         assert res == expected
@@ -412,6 +421,7 @@ class TestSerializeOperator:
                 match="Operation PauliZ applied to invalid wire",
             ):
                 circuit()
+
 
 class TestExecute:
     """Tests for the execute method of the base OrquestraDevice class."""
@@ -537,7 +547,7 @@ class TestExecute:
             res = circuit()
             assert np.allclose(res, np.array([1, test_batch_res0]))
 
-    @pytest.mark.parametrize("mock_res", [[], "res", {'a': 3}, {'a': []}])
+    @pytest.mark.parametrize("mock_res", [[], "res", {"a": 3}, {"a": []}])
     def test_wrong_result_format_single_step(self, mock_res, monkeypatch):
         """Test that the resource details defined when the device was created
         are passed to generate the workflow."""
@@ -550,9 +560,13 @@ class TestExecute:
                 "loop_until_finished",
                 lambda *args, **kwargs: mock_res,
             )
+            m.setattr(
+                pennylane_orquestra.orquestra_device, "workflow_details", lambda *args: "SomeStatus"
+            )
 
             with pytest.raises(ValueError, match="Unexpected result format"):
                 dev.single_step_results("SomeID")
+
 
 class TestBatchExecute:
     """Test the integration of the device with PennyLane."""
@@ -803,7 +817,7 @@ class TestBatchExecute:
 
         qml.disable_tape()
 
-    @pytest.mark.parametrize("mock_res", [[], "res", {'a': 3}, {'a': []}])
+    @pytest.mark.parametrize("mock_res", [[], "res", {"a": 3}, {"a": []}])
     def test_wrong_result_format_multiple_steps(self, mock_res, monkeypatch):
         """Test that the resource details defined when the device was created
         are passed to generate the workflow."""
@@ -815,6 +829,9 @@ class TestBatchExecute:
                 pennylane_orquestra.orquestra_device,
                 "loop_until_finished",
                 lambda *args, **kwargs: mock_res,
+            )
+            m.setattr(
+                pennylane_orquestra.orquestra_device, "workflow_details", lambda *args: "SomeStatus"
             )
 
             with pytest.raises(ValueError, match="Unexpected result format"):
