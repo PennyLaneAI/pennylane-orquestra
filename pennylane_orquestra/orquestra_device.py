@@ -471,7 +471,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             current_status = workflow_details(workflow_id)
             raise ValueError(
                 f"Unexpected result format for workflow {workflow_id}.\n "
-                "{''.join(current_status)}"
+                f"{''.join(current_status)}"
             ) from e
         return results
 
