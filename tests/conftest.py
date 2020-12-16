@@ -254,7 +254,7 @@ def test_result():
 @pytest.fixture
 def token():
     """Get the IBMQX token from an environment variable."""
-    t = os.getenv("IBMQX_TOKEN_TEST", None)
+    t = os.getenv("IBMQX_TOKEN", None)
 
     if t is None:
         pytest.skip("Skipping test, no IBMQ token available")

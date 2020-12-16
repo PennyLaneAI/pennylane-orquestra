@@ -100,7 +100,7 @@ the end-to-end integration of the plugin can be run with ``make test-e2e``.
 
     Tests on the `IBMQ device
     <https://pennylaneorquestra.readthedocs.io/en/latest/devices/ibmq.html>`_
-    can only be run if an IBM Q authentication token is available via the ``IBMQX_TOKEN_TEST``
+    can only be run if an IBM Q authentication token is available via the ``IBMQX_TOKEN``
     environment variable for the `IBM Q experience
     <https://quantum-computing.ibm.com/>`_.
 
