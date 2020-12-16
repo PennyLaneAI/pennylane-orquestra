@@ -56,9 +56,9 @@ class TestBaseDevice:
             circuit()
 
     @pytest.mark.parametrize("dev,backend", non_analytic_backends)
-    def test_qasm_simulator_analytic_warning(self, dev, backend):
-        """Test that a warning is raised when using the QeQiskitDevice with the
-        qasm_simulator backend in analytic mode and that we'll switch to
+    def test_analytic_warning(self, dev, backend):
+        """Test that a warning is raised when setting devices with
+        sampling-only backends to analytic mode and that we'll switch to
         sampling mode."""
         with pytest.warns(
             Warning,
