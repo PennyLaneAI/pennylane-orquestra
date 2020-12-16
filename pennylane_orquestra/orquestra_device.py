@@ -486,8 +486,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
         Args:
             results (list): workflow results of the batched execution
-            empty_obs_list (list): list of indices where every observable was
-                identity
+            empty_obs_list (list): list of indices where every observable is the identity
             identity_indices (dict): maps the index of a sublist to the
                 the list of indices where the observable was an identity
 
