@@ -46,6 +46,8 @@ analytic_tol = 10e-10
 # The tolerance for sampling is expected to be higher
 tol = 10e-2
 
+# Expected to fail if qe is unavailable (for example for the CI)
+@pytest.mark.xfail(raises=FileNotFoundError)
 class TestWorkflowSubmissionIntegration:
     """Test that workflow generation works as expected."""
 
@@ -119,6 +121,8 @@ devices = [
 ]
 
 
+# Expected to fail if qe is unavailable (for example for the CI)
+@pytest.mark.xfail(raises=FileNotFoundError)
 class TestOrquestraIntegration:
     """Test the Orquestra integration with PennyLane."""
 
@@ -214,6 +218,8 @@ class TestOrquestraIntegration:
         assert np.allclose(res_orquestra, res_default_qubit)
         qml.disable_tape()
 
+# Expected to fail if qe is unavailable (for example for the CI)
+@pytest.mark.xfail(raises=FileNotFoundError)
 class TestOrquestraIBMQIntegration:
     def test_apply_x(self, token):
         """Test a simple circuit that applies PauliX on the first wire."""
