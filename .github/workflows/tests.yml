@@ -48,9 +48,6 @@ jobs:
       - name: Run tests
         run: python -m pytest tests -k 'not e2e' $COVERAGE_FLAGS
 
-      - name: Adjust coverage file for Codecov
-        run: bash <(sed -i 's/filename=\"/filename=\"pennylane_orquestra\//g' coverage.xml)
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
