@@ -46,8 +46,8 @@ Features
 * Provides four devices to be used with PennyLane: ``orquestra.forest``,
   ``orquestra.ibmq``, ``orquestra.qiskit`` and ``orquestra.qulacs``.
   These devices provide access to the various backends and simulators,
-  including hardware devices like the IBM hardware accessible through the
-  cloud.
+  including hardware devices like the IBM hardware, which is accessible
+  through the cloud.
 
 * Allows computing expectation values by submitting and processing Orquestra
   workflows.
