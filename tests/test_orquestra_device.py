@@ -27,6 +27,7 @@ from conftest import (
     test_batch_res2,
     resources_default,
     MockPopen,
+    test_workflow_id_name,
 )
 
 qiskit_analytic_specs = '{"module_name": "qeqiskit.simulator", "function_name": "QiskitSimulator", "device_name": "statevector_simulator"}'
@@ -134,7 +135,7 @@ class TestBaseDevice:
             file_kept = os.path.exists(tmpdir.join(f"expval-{test_uuid}.yaml"))
             assert file_kept if keep else not file_kept
             assert dev.filenames == ([f"expval-{test_uuid}.yaml"] if keep else [])
-            assert dev.latest_id == "SomeWorkflowID"
+            assert dev.latest_id == test_workflow_id_name
 
     @pytest.mark.parametrize("timeout", [1, 2.5])
     def test_timeout(self, timeout, tmpdir, monkeypatch):

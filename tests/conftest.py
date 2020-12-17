@@ -22,6 +22,8 @@ import pennylane as qml
 import pytest
 
 
+test_workflow_id_name = "SomeWorkflowID"
+
 # Auxiliary classes and functions
 def qe_list_workflow():
     """Function for a CLI call to list workflows.
@@ -48,7 +50,7 @@ class MockPopen:
                 if self.msg is None:
                     self.msg = [
                         "Successfully submitted workflow to quantum engine!\n",
-                        "SomeWorkflowID",
+                        test_workflow_id_name,
                     ]
                 return self.msg
 
