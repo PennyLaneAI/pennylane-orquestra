@@ -52,9 +52,20 @@ class QeQiskitDevice(OrquestraDevice):
                 # Raise a warning if the analytic attribute was set to True
                 warnings.warn(
                     f"The {self.short_name} device cannot be used in analytic "
-                    "mode. Setting analytic to False. Results are based on "
-                    "sampling."
+                    f"mode with the {backend} backend. Setting analytic to False. "
+                    "Results are based on sampling."
                 )
 
             kwargs["analytic"] = False
+
+        # TODO: Remove when the Orquestra supports qiskit>0.18.3 with its Qiskit component
+        if backend == "statevector_simulator":
+            if not kwargs.get("analytic", True):
+                # Raise a warning if the analytic attribute was set to False
+                warnings.warn(
+                    f"The {self.short_name} device with the {backend} backend "
+                    "always runs with shots=1 due to a malfunction in the "
+                    "version of Qiskit used by Orquestra."
+                )
+
         super().__init__(wires, backend=backend, shots=shots, **kwargs)

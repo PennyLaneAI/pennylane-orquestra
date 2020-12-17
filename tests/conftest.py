@@ -22,6 +22,8 @@ import pennylane as qml
 import pytest
 
 
+test_workflow_id_name = "SomeWorkflowID"
+
 # Auxiliary classes and functions
 def qe_list_workflow():
     """Function for a CLI call to list workflows.
@@ -48,7 +50,7 @@ class MockPopen:
                 if self.msg is None:
                     self.msg = [
                         "Successfully submitted workflow to quantum engine!\n",
-                        "SomeWorkflowID",
+                        test_workflow_id_name,
                     ]
                 return self.msg
 
@@ -69,6 +71,12 @@ def custom_wires(request):
     """Custom wire mapping for Pennylane<->OpenFermion conversion"""
     return request.param
 
+@pytest.fixture
+def tape_mode():
+    """Enter tape mode in the beginning of the test and exit at the end."""
+    qml.enable_tape()
+    yield
+    qml.disable_tape()
 
 # Auxiliary data
 
@@ -85,9 +93,9 @@ first_name = "run-circuit-and-get-expval-0"
 first_config = {
     "runtime": {
         "language": "python3",
-        "imports": ["pl_orquestra", "z-quantum-core", "qe-openfermion", "qe-forest"],
+        "imports": ["pennylane_orquestra", "z-quantum-core", "qe-openfermion", "qe-forest"],
         "parameters": {
-            "file": "pl_orquestra/steps/expval.py",
+            "file": "pennylane_orquestra/steps/expval.py",
             "function": "run_circuit_and_get_expval",
         },
     }
@@ -110,9 +118,9 @@ second_name = "run-circuit-and-get-expval-1"
 second_config = {
     "runtime": {
         "language": "python3",
-        "imports": ["pl_orquestra", "z-quantum-core", "qe-openfermion", "qe-forest"],
+        "imports": ["pennylane_orquestra", "z-quantum-core", "qe-openfermion", "qe-forest"],
         "parameters": {
-            "file": "pl_orquestra/steps/expval.py",
+            "file": "pennylane_orquestra/steps/expval.py",
             "function": "run_circuit_and_get_expval",
         },
     }
@@ -139,14 +147,14 @@ steps = [first_step, second_step]
 
 types = ["circuit", "expval"]
 
-pl_orquestra_import = {
-    "name": "pl_orquestra",
+pennylane_orquestra_import = {
+    "name": "pennylane_orquestra",
     "type": "git",
-    "parameters": {"repository": "git@github.com:antalszava/pl_orquestra.git", "branch": "master"},
+    "parameters": {"repository": "git@github.com:PennyLaneAI/pennylane-orquestra.git", "branch": "main"},
 }
 
 imports_workflow = [
-    pl_orquestra_import,
+    pennylane_orquestra_import,
     {
         "name": "z-quantum-core",
         "type": "git",
@@ -196,6 +204,45 @@ step_name1 = "run-circuit-and-get-expval-1"
 step_name2 = "run-circuit-and-get-expval-2"
 
 @pytest.fixture()
+def test_batch_result():
+    """Example batch results used in tests.
+
+    The step names are not in order ("stepName" entry in each nested
+    dictionary), so that the order of results differs from the way they were
+    assumed to be submitted and ordering can be tested too.
+    """
+    test_batch_res = {
+        "expval-id2312": {
+            "expval": {
+                "list": [test_batch_res2],
+                "schema": "test",
+            },
+            "stepId": "expval",
+            "stepName": step_name2,
+            "workflowId": "expval",
+        },
+        "expval-id000": {
+            "expval": {
+                "list": [test_batch_res0],
+                "schema": "test",
+            },
+            "stepId": "expval",
+            "stepName": step_name0,
+            "workflowId": "expval",
+        },
+        "expval-id111": {
+            "expval": {
+                "list": [test_batch_res1],
+                "schema": "test",
+            },
+            "stepId": "expval",
+            "stepName": step_name1,
+            "workflowId": "expval",
+        },
+    }
+    return test_batch_res
+
+@pytest.fixture()
 def test_result():
     """Example test result for a workflow."""
     test_res = {
@@ -211,3 +258,13 @@ def test_result():
     }
 
     return test_res
+
+@pytest.fixture
+def token():
+    """Get the IBMQX token from an environment variable."""
+    t = os.getenv("IBMQX_TOKEN", None)
+
+    if t is None:
+        pytest.skip("Skipping test, no IBMQ token available")
+
+    return t

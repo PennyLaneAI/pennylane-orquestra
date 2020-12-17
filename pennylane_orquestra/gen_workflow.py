@@ -63,13 +63,13 @@ def step_dictionary(name_suffix):
             "runtime": {
                 "language": "python3",
                 "imports": [
-                    "pl_orquestra",
+                    "pennylane_orquestra",
                     "z-quantum-core",
                     "qe-openfermion",
                     # Place to insert: step backend component import
                 ],
                 "parameters": {
-                    "file": "pl_orquestra/steps/expval.py",
+                    "file": "pennylane_orquestra/steps/expval.py",
                     "function": "run_circuit_and_get_expval",
                 },
             }
@@ -115,11 +115,11 @@ def gen_expval_workflow(component, backend_specs, circuits, operators, **kwargs)
         "name": "expval",
         "imports": [
             {
-                "name": "pl_orquestra",
+                "name": "pennylane_orquestra",
                 "type": "git",
                 "parameters": {
-                    "repository": "git@github.com:antalszava/pl_orquestra.git",
-                    "branch": "master",
+                    "repository": "git@github.com:PennyLaneAI/pennylane-orquestra.git",
+                    "branch": "main",
                 },
             },
             {

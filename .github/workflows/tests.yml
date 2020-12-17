@@ -46,10 +46,7 @@ jobs:
           pip install dist/PennyLane_Orquestra*.whl
 
       - name: Run tests
-        run: python -m pytest tests $COVERAGE_FLAGS
-
-      - name: Adjust coverage file for Codecov
-        run: bash <(sed -i 's/filename=\"/filename=\"pennylane_orquestra\//g' coverage.xml)
+        run: python -m pytest tests -k 'not e2e' $COVERAGE_FLAGS
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1

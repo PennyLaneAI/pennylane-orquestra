@@ -39,6 +39,11 @@ jobs:
           pip install -r steps/steps_requirements.txt
           pip install wheel pytest pytest-cov pytest-mock flaky --upgrade
 
+      - name: Install PennyLane-Orquestra
+        run: |
+          python setup.py bdist_wheel
+          pip install dist/PennyLane_Orquestra*.whl
+
       - name: Run Forest Quilc
         run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
 
