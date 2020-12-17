@@ -520,7 +520,7 @@ class TestExecute:
 
     @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
     def test_identity_mixed(self, dev, monkeypatch, tmpdir, test_result):
-        """Test computing that computing the expectation value of the identity
+        """Test that computing the expectation values of the identity
         and PauliZ returns an array of results."""
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
@@ -545,8 +545,8 @@ class TestExecute:
 
     @pytest.mark.parametrize("mock_res", [[], "res", {"a": 3}, {"a": []}])
     def test_wrong_result_format_single_step(self, mock_res, monkeypatch):
-        """Test that if a result with unexpected format of a single-step
-        workflow is obtained then an error is raised."""
+        """Test that an error is raised if a result with unexpected format of a single-step
+        workflow is obtained."""
         dev = qml.device("orquestra.qiskit", wires=2)
 
         with monkeypatch.context() as m:
