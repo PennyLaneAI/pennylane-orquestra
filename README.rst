@@ -166,7 +166,7 @@ the `Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>`_
 
 .. license-end-inclusion-marker-do-not-remove
 
-A package for integrating PennyLane with Orquestra.
+A plugin for integrating PennyLane with Orquestra.
 
 **Installation**
 
