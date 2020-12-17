@@ -428,7 +428,7 @@ class TestExecute:
 
     def test_serialize_circuit_rotations_tape(self, monkeypatch, tmpdir, test_batch_result):
         """Test that a circuit that is serialized correctly with rotations for
-        a remote hardware backend in tape mode"""
+        a remote hardware backend"""
         dev = QeQiskitDevice(wires=1, shots=1000, backend="qasm_simulator", analytic=False)
 
         circuit_history = []
@@ -462,7 +462,7 @@ class TestExecute:
 
     def test_serialize_circuit_no_rotations_tape(self, monkeypatch, tmpdir, test_batch_result):
         """Test that a circuit that is serialized correctly without rotations for
-        a simulator backend in tape mode"""
+        a simulator backend."""
         dev = QeQiskitDevice(wires=1, shots=1000, backend="statevector_simulator", analytic=True)
 
         circuit_history = []
