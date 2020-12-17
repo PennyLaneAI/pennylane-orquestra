@@ -613,8 +613,10 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         structure of the result corresponds to results sent by Orquestra API
         v1.0.0.
 
-        Due to parallel execution, results might have been written in any
-        order, so results are sorted by the step name.
+        Orquestra doesn't necessarily execute parallel steps in the order they
+        were defined in a workflow file. Therefore, due to parallel execution,
+        results might have been written in any order, so results are sorted by
+        the step name.
 
         Args:
             workflow_id (str): the ID of the workflow to extract results for
