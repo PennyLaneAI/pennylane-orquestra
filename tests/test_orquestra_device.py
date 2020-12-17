@@ -520,7 +520,7 @@ class TestExecute:
 
     @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
     def test_identity_mixed(self, dev, monkeypatch, tmpdir, test_result):
-        """Test computing that computing the expectation value of the identity
+        """Test that computing the expectation values of the identity
         and PauliZ returns an array of results."""
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
