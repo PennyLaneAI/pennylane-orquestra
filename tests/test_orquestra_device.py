@@ -596,9 +596,8 @@ class TestBatchExecute:
 
     @pytest.mark.parametrize("dev", ["orquestra.forest", "orquestra.qiskit", "orquestra.qulacs"])
     def test_identity_mixed(self, dev, monkeypatch, tmpdir, test_result):
-        """Test computing that computing the expectation value of a tape with
-        observables of identity and PauliZ and a tape where only the identity
-        of observable returns the correct list of results."""
+        """Test that computing the expectation values for tapes with the
+        identity and PauliZ returns the correct list of results."""
         with monkeypatch.context() as m:
             m.setattr(pennylane_orquestra.cli_actions, "user_data_dir", lambda *args: tmpdir)
 
