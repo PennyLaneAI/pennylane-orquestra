@@ -564,7 +564,8 @@ class TestExecute:
                 dev.single_step_results("SomeID")
 
 class TestBatchExecute:
-    """Test the integration of the device with PennyLane."""
+    """Test the integration of the device.batch_execute method with
+    PennyLane."""
 
     def test_error_if_not_expval_batched(self):
         """Test that an error is raised if not an expectation value is
