@@ -24,5 +24,5 @@ By default, the ``orquestra.ibmq`` device uses the simulator backend
 
 Most of the backends of the ``orquestra.ibmq`` device, such as ``ibmq_london``
 or ``ibmq_16_melbourne``, are *hardware backends*. Running PennyLane with these
-backends means to send the circuit as a job to the actual quantum computer and
-retrieve the results via the cloud and Orquestra.
+backends means that the circuit is sent as a job to the actual quantum computer
+and the results are retrieved via the cloud and Orquestra.

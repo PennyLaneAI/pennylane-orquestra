@@ -44,10 +44,10 @@ Features
 ========
 
 * Provides four devices to be used with PennyLane: ``orquestra.forest``,
-  ``orquestra.ibmq``, ``orquestra.orquestra`` and ``orquestra.qulacs``.
+  ``orquestra.ibmq``, ``orquestra.qiskit`` and ``orquestra.qulacs``.
   These devices provide access to the various backends and simulators,
-  including hardware devices like the IBM hardware accessible through the
-  cloud.
+  including hardware devices like the IBM hardware, which is accessible
+  through the cloud.
 
 * Allows computing expectation values by submitting and processing Orquestra
   workflows.
@@ -165,12 +165,3 @@ The PennyLane orquestra plugin is **free** and **open source**, released under
 the `Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>`_.
 
 .. license-end-inclusion-marker-do-not-remove
-
-A package for integrating PennyLane with Orquestra.
-
-**Installation**
-
-Installing `PennyLane <https://github.com/PennyLaneAI/pennylane>`__ and the `Quantum Engine CLI <https://github.com/zapatacomputing/qe-cli>`__ are required.
-
-The package can be installed using ``pip`` and running ``pip install -e .`` from
-the ``pennylane_orquestra`` folder.
