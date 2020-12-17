@@ -103,7 +103,7 @@ class TestWorkflowSubmissionIntegration:
         file_name = tmpdir.join("test_workflow.yaml")
 
         with open(file_name, "w") as file:
-            d = yaml.dump(workflow, file)
+            yaml.dump(workflow, file)
 
         # Submit a workflow --- error due to the operator
         with pytest.raises(ValueError, match="Error"):
