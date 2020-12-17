@@ -39,7 +39,7 @@ info = {
             ]
     },
     'description': 'PennyLane plugin for Orquestra by Xanadu Inc.',
-    'long_description': open('README.md').read(),
+    'long_description': open('README.rst').read(),
     'long_description_content_type': 'text/x-rst',
     'provides': ['pennylane_orquestra'],
     'install_requires': requirements,
