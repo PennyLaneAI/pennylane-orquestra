@@ -35,7 +35,7 @@ Backends
 ~~~~~~~~
 
 By default, the ``orquestra.qiskit`` device uses the noisy ``'qasm_simulator'``
-backend, but this may be changed to ``'statevector_simulator'``.  For more
+backend, but this can be changed to ``'statevector_simulator'``.  For more
 information on backends, please visit the `Orquestra interfaces documentation
 <http://docs.orquestra.io/other-resources/interfaces/>`_.
 
