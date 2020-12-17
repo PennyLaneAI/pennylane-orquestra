@@ -139,7 +139,7 @@ class TestBaseDevice:
 
     @pytest.mark.parametrize("timeout", [1, 2.5])
     def test_timeout(self, timeout, tmpdir, monkeypatch):
-        """Test the option for keeping/deleting the workflow file."""
+        """Test the option for setting the timeout using a device."""
 
         file_name = "test_workflow.yaml"
         dev = qml.device("orquestra.forest", wires=3, timeout=timeout)
