@@ -69,8 +69,7 @@ class TestBaseDevice:
 
     def test_statevector_simulator_single_shot_warning(self):
         """Test that a warning is raised when using the QeQiskitDevice with the
-        statevector_simulator backend in sampling mode and that shots=1 is
-        set."""
+        statevector_simulator backend in sampling mode."""
         with pytest.warns(
             Warning,
             match="shots=1",
