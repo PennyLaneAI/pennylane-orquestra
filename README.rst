@@ -165,12 +165,3 @@ The PennyLane orquestra plugin is **free** and **open source**, released under
 the `Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>`_.
 
 .. license-end-inclusion-marker-do-not-remove
-
-A plugin for integrating PennyLane with Orquestra.
-
-**Installation**
-
-Installing `PennyLane <https://github.com/PennyLaneAI/pennylane>`__ and the `Quantum Engine CLI <https://github.com/zapatacomputing/qe-cli>`__ are required.
-
-The plugin can be installed using ``pip`` by running ``pip install -e .`` from
-the ``pennylane_orquestra`` folder.
