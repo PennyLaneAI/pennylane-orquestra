@@ -567,8 +567,8 @@ class TestBatchExecute:
     """Test the integration of the device with PennyLane."""
 
     def test_error_if_not_expval_batched(self):
-        """Test that an error is raised if not an expectation value is
-        computed during batched execution"""
+        """Test that an error is raised if an expectation value isn't
+        computed during batched execution."""
         dev = qml.device("orquestra.qiskit", wires=2)
 
         with qml.tape.QuantumTape() as tape1:
