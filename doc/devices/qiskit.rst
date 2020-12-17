@@ -39,7 +39,7 @@ backend, but this can be changed to ``'statevector_simulator'``.  For more
 information on backends, please visit the `Orquestra interfaces documentation
 <http://docs.orquestra.io/other-resources/interfaces/>`_.
 
-You can change a ``'orquestra.qiskit'`` device's backend with the ``backend``
+You can change an ``'orquestra.qiskit'`` device's backend with the ``backend``
 argument when creating the ``device``:
 
 .. code-block:: python
