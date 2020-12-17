@@ -545,8 +545,8 @@ class TestExecute:
 
     @pytest.mark.parametrize("mock_res", [[], "res", {"a": 3}, {"a": []}])
     def test_wrong_result_format_single_step(self, mock_res, monkeypatch):
-        """Test that if a result with unexpected format of a single-step
-        workflow is obtained then an error is raised."""
+        """Test that an error is raised if a result with unexpected format of a single-step
+        workflow is obtained."""
         dev = qml.device("orquestra.qiskit", wires=2)
 
         with monkeypatch.context() as m:
