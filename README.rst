@@ -15,7 +15,7 @@ PennyLane-Orquestra Plugin
 
 .. image:: https://img.shields.io/readthedocs/pennylane-orquestra.svg?logo=read-the-docs&style=flat-square
     :alt: Read the Docs
-    :target: https://pennylaneorquestra.readthedocs.io
+    :target: https://pennylane-orquestra.readthedocs.io
 
 .. image:: https://img.shields.io/pypi/v/PennyLane-orquestra.svg?style=flat-square
     :alt: PyPI
