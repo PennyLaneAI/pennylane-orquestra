@@ -418,6 +418,11 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         ops = [ops_json]
         qasm_circuit = [qasm_circuit]
 
+        if getattr(self, "_noise_data", False):
+            # Only certain Qiskit devices have noise data
+            # if specified, pass it as kwarg
+            kwarg["noise_data"] = self._noise_data
+
         # 4-5. Create the backend specs & workflow file
         workflow = gen_expval_workflow(
             self.qe_component,

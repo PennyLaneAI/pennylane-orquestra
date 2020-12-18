@@ -81,35 +81,65 @@ def step_dictionary(name_suffix):
     return step_dict
 
 
-def gen_expval_workflow(component, backend_specs, circuits, operators, **kwargs):
-    """Workflow template for computing the expectation value of operators
-    given a quantum circuit and a device backend.
+noise_step_name = "get-qiskit-noise-model"
+
+
+def noise_step_dict(device_name, api_token, hub=None, group=None, project=None):
+    """Creates a new step that obtains the defined noise-model.
 
     Args:
-        component (str): the name of the Orquestra component to use
-        backend_specs (str): the Orquestra backend specifications as a json
-            string
-        circuits (list): list of OpenQASM 2.0 programs, each representing a
-            circuit as an input for a workflow step
-        operators (list): A list of json strings, each representing a list of
-            operators as an input for a workflow step. Each operator is a string in
-            an ``openfermion.QubitOperator`` or ``openfermion.IsingOperator``
-            representation. For example, ``['["1 [Z0]", "1 [Z1]"]']`` is an
-            input for a single step that returns the expectation value of two
-            observables: ``Z0`` and ``Z1``.
+        device_name (string): The name of the Qiskit device to get the noise
+            model for
+        api_token (string): The IBMQ api token
 
     Keyword arguments:
-        resources=None (str): the machine resources to use for executing the
-            workflow
+        hub=None (string): The IBMQ hub
+        group=None (string): The IBMQ group
+        project=None (string): The IBMQ project
 
     Returns:
-        dict: the dictionary that contains the workflow template to be
-        submitted to Orquestra
+        dict: a dictionary containing data for a noise step
     """
-    backend_import = backend_import_db.get(component, None)
-    if backend_import is None:
-        raise ValueError("The specified backend component is not supported.")
+    # Rename the step
+    noise_dict = step_dict("")
+    noise_dict["name"] = noise_step_name
 
+    noise_parameters = {"file": "qe-qiskit/steps/noise.py", "function": "get_qiskit_noise_model"}
+
+    # No need to import PennyLane-Orquestra for this step
+    del noise_dict["config"]["runtime"]["imports"][0]
+
+    # Insert the Qiskit component name
+    noise_dict["config"]["runtime"]["imports"].append("qe-qiskit")
+
+    # Re-define the parameters for running the correct function
+    noise_dict["config"]["runtime"]["parameters"] = noise_parameters
+
+    noise_dict["inputs"] = []
+
+    noise_dict["inputs"].append({"device_name": device_name})
+    noise_dict["inputs"].append({"api_token": api_token})
+
+    if hub is not None:
+        noise_dict["inputs"].append({"hub": hub})
+    if group is not None:
+        noise_dict["inputs"].append({"group": group})
+    if project is not None:
+        noise_dict["inputs"].append({"project": project})
+
+    noise_model_out = {"name": "noise-model", "type": "noise-model"}
+    connectivity_out = {"name": "device-connectivity", "type": "device-connectivity"}
+    noise_dict["outputs"] = [noise_model_out, connectivity_out]
+    return noise_dict
+
+
+def _get_expval_template():
+    """Auxiliary function that produces an Orquestra workflow template for
+    computing expectation values.
+
+    Returns:
+        dict: the workflow template
+    """
     expval_template = {
         "apiVersion": "io.orquestra.workflow/1.0.0",
         "name": "expval",
@@ -143,6 +173,40 @@ def gen_expval_workflow(component, backend_specs, circuits, operators, **kwargs)
         "steps": [],
         "types": ["circuit", "expval"],
     }
+    return expval_template
+
+
+def gen_expval_workflow(component, backend_specs, circuits, operators, **kwargs):
+    """Workflow template for computing the expectation value of operators
+    given a quantum circuit and a device backend.
+
+    Args:
+        component (str): the name of the Orquestra component to use
+        backend_specs (str): the Orquestra backend specifications as a json
+            string
+        circuits (list): list of OpenQASM 2.0 programs, each representing a
+            circuit as an input for a workflow step
+        operators (list): A list of json strings, each representing a list of
+            operators as an input for a workflow step. Each operator is a string in
+            an ``openfermion.QubitOperator`` or ``openfermion.IsingOperator``
+            representation. For example, ``['["1 [Z0]", "1 [Z1]"]']`` is an
+            input for a single step that returns the expectation value of two
+            observables: ``Z0`` and ``Z1``.
+
+    Keyword arguments:
+        noise_data= (str): the noise model to use
+        resources=None (str): the machine resources to use for executing the
+            workflow
+
+    Returns:
+        dict: the dictionary that contains the workflow template to be
+        submitted to Orquestra
+    """
+    backend_import = backend_import_db.get(component, None)
+    if backend_import is None:
+        raise ValueError("The specified backend component is not supported.")
+
+    expval_template = _get_expval_template()
 
     # Insert the backend component to the main imports
     expval_template["imports"].append(backend_import)

@@ -68,4 +68,22 @@ class QeQiskitDevice(OrquestraDevice):
                     "version of Qiskit used by Orquestra."
                 )
 
+        if "noise_data" in kwargs:
+            noise_data = kwargs["noise_data"]
+
+            if "device_name" not in noise_data:
+                raise ValueError(
+                    "No device specified for the noise model. "
+                    "Specify the device_name option in the noise_data "
+                    "dictionary."
+                )
+
+            if "api_token" not in noise_data:
+                raise ValueError(
+                    "No api token specified for obtaining noise model. "
+                    "Specify the api_token option in the noise_data "
+                    "dictionary."
+                )
+
+            self._noise_data = noise_data
         super().__init__(wires, backend=backend, shots=shots, **kwargs)
