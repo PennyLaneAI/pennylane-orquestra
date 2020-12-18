@@ -1,15 +1,19 @@
 PennyLane-Orquestra Plugin
 ##########################
 
-.. image:: https://img.shields.io/github/workflow/status/PennyLaneAI/pennylane-orquestra/Tests/master?logo=github&style=flat-square
+.. image:: https://img.shields.io/github/workflow/status/pennylaneai/pennylane-orquestra/PennyLane-Orquestra%20component%20tests/main?label=Component%20tests&logo=github&style=flat-square
     :alt: GitHub Workflow Status (branch)
-    :target: https://github.com/PennyLaneAI/pennylane-orquestra/actions?query=workflow%3ATests
+    :target: https://github.com/PennyLaneAI/pennylane-orquestra/actions?query=workflow%3APennyLane-Orquestra%20component%20tests
 
-.. image:: https://img.shields.io/codecov/c/github/PennyLaneAI/pennylane-orquestra/master.svg?logo=codecov&style=flat-square
+.. image:: https://img.shields.io/github/workflow/status/pennylaneai/pennylane-orquestra/Unit%20tests/main?label=Unit%20tests&logo=github&style=flat-square
+    :alt: GitHub Workflow Status (branch)
+    :target: https://github.com/PennyLaneAI/pennylane-orquestra/actions?query=workflow%3AUnit%20tests
+
+.. image:: https://img.shields.io/codecov/c/github/PennyLaneAI/pennylane-orquestra/main.svg?logo=codecov&style=flat-square
     :alt: Codecov coverage
     :target: https://codecov.io/gh/PennyLaneAI/pennylane-orquestra
 
-.. image:: https://img.shields.io/codefactor/grade/github/PennyLaneAI/pennylane-orquestra/master?logo=codefactor&style=flat-square
+.. image:: https://img.shields.io/codefactor/grade/github/PennyLaneAI/pennylane-orquestra/main?logo=codefactor&style=flat-square
     :alt: CodeFactor Grade
     :target: https://www.codefactor.io/repository/github/pennylaneai/pennylane-orquestra
 
