@@ -25,15 +25,17 @@ import numpy as np
 from openfermion import IsingOperator, QubitOperator
 from qiskit import QuantumCircuit
 
-from zquantum.core.circuit import Circuit
+from zquantum.core.circuit import Circuit, load_circuit_connectivity
 from zquantum.core.measurement import expectation_values_to_real
-from zquantum.core.utils import create_object, save_list
+from zquantum.core.utils import create_object, save_list, load_noise_model
 
 
 def run_circuit_and_get_expval(
     backend_specs: str,
     circuit: str,
     operators: str,
+    noise_model: str = "None",
+    device_connectivity: str = "None",
 ):
     """Executes a circuit to obtain the expectation value of an operator on a
     given backend.
@@ -54,9 +56,20 @@ def run_circuit_and_get_expval(
         circuit (str): the circuit represented as an OpenQASM 2.0 program
         operators (str): the operator in an ``openfermion.QubitOperator``
             or ``openfermion.IsingOperator`` representation
+
+    Keyword arguments:
+        noise_model="None" (str): the noise model to use
+        device_connectivity="None" (str): the device connectivity of the remote
+            device
     """
     backend_specs = json.loads(backend_specs)
     operators = json.loads(operators)
+
+    if noise_model != "None":
+        backend_specs["noise_model"] = load_noise_model(noise_model)
+
+    if device_connectivity != "None":
+        backend_specs["device_connectivity"] = load_circuit_connectivity(device_connectivity)
 
     backend = create_object(backend_specs)
 
