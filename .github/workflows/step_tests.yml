@@ -2,7 +2,7 @@ name: PennyLane-Orquestra component tests
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 
