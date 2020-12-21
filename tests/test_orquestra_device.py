@@ -89,9 +89,10 @@ class TestBaseDevice:
 
         assert not dev.analytic
 
-    def test_ibmq_no_token_error(self):
+    def test_ibmq_no_token_error(self, monkeypatch):
         """Test that an error is raised when using the IBMQDevice without any
         tokens specified."""
+        monkeypatch.delenv("IBMQX_TOKEN", raising=False)
         with pytest.raises(ValueError, match="Please pass a valid IBMQX token"):
             dev = qml.device("orquestra.ibmq", wires=2, analytic=False)
 
