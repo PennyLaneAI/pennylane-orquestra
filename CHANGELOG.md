@@ -2,7 +2,7 @@
 
 ### Bug fixes
 
-* Fixed a bug when building the wheel.
+* Fixed a bug related to building the wheel.
   [(#13)](https://github.com/PennyLaneAI/pennylane-orquestra/pull/13)
 
 ### Contributors
