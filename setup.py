@@ -45,7 +45,7 @@ info = {
     'install_requires': requirements,
     'package_dir': {
         'pl_component': 'src/python',
-        'pennylane_orquestra': '',
+        'pennylane_orquestra': 'pennylane_orquestra',
         }
 }
 
