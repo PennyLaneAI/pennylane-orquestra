@@ -103,7 +103,7 @@ the end-to-end integration of the plugin can be run with ``make test-e2e``.
 .. note::
 
     Tests on the `IBMQ device
-    <https://pennylaneorquestra.readthedocs.io/en/latest/devices/ibmq.html>`_
+    <https://pennylane-orquestra.readthedocs.io/en/latest/devices/ibmq.html>`_
     can only be run if an IBM Q authentication token is available via the ``IBMQX_TOKEN``
     environment variable for the `IBM Q experience
     <https://quantum-computing.ibm.com/>`_.
@@ -122,7 +122,7 @@ test-steps`` will run the ``steps`` test suite.
 
 .. installation-end-inclusion-marker-do-not-remove
 
-Please refer to the `plugin documentation <https://pennylaneorquestra.readthedocs.io/>`_ as
+Please refer to the `plugin documentation <https://pennylane-orquestra.readthedocs.io/>`_ as
 well as to the `PennyLane documentation <https://pennylane.readthedocs.io/>`_ for further reference.
 
 Contributing
