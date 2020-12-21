@@ -4,4 +4,5 @@ Initial release.
 
 This release contains contributions from (in alphabetical order):
 
-Theodor Isacsson, Josh Izaac, Nathan Killoran, Antal Száva
+Chase Roberts, Alain Delgado Gran, Theodor Isacsson, Josh Izaac, Nathan
+Killoran, Antal Száva.
