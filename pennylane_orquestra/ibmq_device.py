@@ -57,7 +57,9 @@ class QeIBMQDevice(OrquestraDevice):
 
         if self._token is None:
             raise ValueError(
-                "Please pass a valid IBMQX token to the device using the 'ibmqx_token' argument."
+                "Please pass a valid IBMQX token to the device using the "
+                "'ibmqx_token' argument or by specifying the IBMQX_TOKEN "
+                "environment variable."
             )
 
         if kwargs.get("analytic", None):
