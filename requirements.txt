@@ -1,2 +1,2 @@
-git+https://github.com/PennyLaneAI/pennylane.git@tape_hash
+git+https://github.com/PennyLaneAI/pennylane.git
 pyyaml
