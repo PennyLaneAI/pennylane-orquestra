@@ -86,21 +86,12 @@ def run_circuit_and_get_expval(
         instruction_qubits = [qubit.index for qubit in instr[1]]
         active_qubits.extend(instruction_qubits)
 
-
-    # Get the qubits we would like to measure
-    # Data for identities is not stored, need to account for empty terms
-    op_qubits = [term[0][0] for op in ops for term in op.terms if term]
-
-    need_to_activate = set(op_qubits) - set(active_qubits)
+    need_to_activate = set(range(len(qc.qubits))) - set(active_qubits)
     if need_to_activate:
+        # We activate all the qubits for convenience
         for qubit in need_to_activate:
             # Apply the identity
             qc.id(qubit)
-
-    # If there are still no instructions, apply identity to the first qubit
-    # Can happen for an empty circuit when measuring the identity operator
-    if not qc.data:
-        qc.id(qc.qubits[0])
 
     # Convert to zquantum.core.circuit.Circuit
     circuit = Circuit(qc)

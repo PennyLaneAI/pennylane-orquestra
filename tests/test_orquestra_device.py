@@ -240,7 +240,7 @@ class TestCreateBackendSpecs:
 class TestSerializeCircuit:
     """Test the serialize_circuit function"""
 
-    def test_serialize_circuit_rotations(self):
+    def test_serialize_circuit_rotations(self, monkeypatch):
         """Test that a circuit that is serialized correctly with rotations for
         a remote hardware backend"""
         dev = QeQiskitDevice(wires=1, shots=1000, backend="qasm_simulator", analytic=False)
@@ -249,14 +249,19 @@ class TestSerializeCircuit:
             qml.Hadamard(wires=[0])
             return qml.expval(qml.Hadamard(0))
 
-        qnode = qml.QNode(circuit, dev)
-        qnode._construct([], {})
 
-        qasm = dev.serialize_circuit(qnode.circuit)
+        with monkeypatch.context() as m:
+            m.setattr(dev, "execute", lambda *args, **kwargs: np.array([None]))
+            qnode = qml.QNode(circuit, dev)
+            qnode()
+
+        circuit = qnode.qtape.graph if hasattr(qnode, "qtape") else qnode.circuit
+
+        qasm = dev.serialize_circuit(circuit)
         expected = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[1];\ncreg c[1];\nh q[0];\nry(-0.7853981633974483) q[0];\n'
         assert qasm == expected
 
-    def test_serialize_circuit_no_rotations(self):
+    def test_serialize_circuit_no_rotations(self, monkeypatch):
         """Test that a circuit that is serialized correctly without rotations for
         a simulator backend"""
         dev = QeQiskitDevice(wires=1, shots=1000, backend="statevector_simulator", analytic=True)
@@ -265,10 +270,14 @@ class TestSerializeCircuit:
             qml.Hadamard(wires=[0])
             return qml.expval(qml.Hadamard(0))
 
-        qnode = qml.QNode(circuit, dev)
-        qnode._construct([], {})
+        with monkeypatch.context() as m:
+            m.setattr(dev, "execute", lambda *args, **kwargs: np.array([None]))
+            qnode = qml.QNode(circuit, dev)
+            qnode()
 
-        qasm = dev.serialize_circuit(qnode.circuit)
+        circuit = qnode.qtape.graph if hasattr(qnode, "qtape") else qnode.circuit
+
+        qasm = dev.serialize_circuit(circuit)
         expected = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[1];\ncreg c[1];\nh q[0];\n'
         assert qasm == expected
 
@@ -413,13 +422,15 @@ class TestSerializeOperator:
                 lambda *args, **kwargs: test_result,
             )
 
+            invalid_wire = 0
+
             @qml.qnode(dev)
             def circuit():
-                return qml.expval(qml.PauliZ(0))
+                return qml.expval(qml.PauliZ(invalid_wire))
 
             with pytest.raises(
-                qml.qnodes.base.QuantumFunctionError,
-                match="Operation PauliZ applied to invalid wire",
+                qml.wires.WireError,
+                match=f"Wire with label {invalid_wire} not found",
             ):
                 circuit()
 
