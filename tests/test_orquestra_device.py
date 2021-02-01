@@ -275,7 +275,7 @@ class TestSerializeCircuit:
             qnode = qml.QNode(circuit, dev)
             qnode()
 
-        circuit = qnode.qtape.graph if qml.tape_mode_active() else qnode.circuit
+        circuit = qnode.qtape.graph if hasttr(qnode, "qtape") else qnode.circuit
 
         qasm = dev.serialize_circuit(circuit)
         expected = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[1];\ncreg c[1];\nh q[0];\n'
