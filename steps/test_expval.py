@@ -176,10 +176,15 @@ class TestExpvalSampling:
             qml.CNOT(wires=[0, 1])
             return qml.expval(qml.Hadamard(wires=0)), qml.expval(qml.Hadamard(wires=1))
 
-        qnode = qml.QNode(circuit, dev)
-        qnode._construct([], {})
-        qasm_circuit = dev.serialize_circuit(qnode.circuit)
-        ops, _ = dev.process_observables(qnode.circuit.observables)
+        with monkeypatch.context() as m:
+            m.setattr(dev, "execute", lambda *args, **kwargs: np.array([None]))
+            qnode = qml.QNode(circuit, dev)
+            qnode()
+
+        circuit = qnode.qtape.graph if hasattr(qnode, "qtape") else qnode.circuit
+
+        qasm_circuit = dev.serialize_circuit(circuit)
+        ops, _ = dev.process_observables(circuit.observables)
         ops = json.dumps(ops)
 
         lst = []

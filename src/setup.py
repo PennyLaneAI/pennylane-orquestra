@@ -22,7 +22,7 @@ with open(readme_path, "r") as f:
 
 setuptools.setup(	
     name="pennylane_orquestra_steps",
-    version="0.13.1",
+    version="0.14.0",
     maintainer="Xanadu Inc.",
     maintainer_email="software@xanadu.ai",
     description="The PennyLane component for the PennyLane-Orquestra plugin",
