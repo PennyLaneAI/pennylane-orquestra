@@ -184,7 +184,7 @@ class TestExpvalSampling:
         circuit = qnode.qtape.graph if hasattr(qnode, "qtape") else qnode.circuit
 
         qasm_circuit = dev.serialize_circuit(circuit)
-        ops, _ = dev.process_observables(qnode.circuit.observables)
+        ops, _ = dev.process_observables(circuit.observables)
         ops = json.dumps(ops)
 
         lst = []
