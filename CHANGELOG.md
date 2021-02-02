@@ -1,3 +1,16 @@
+# Release 0.14.0
+
+### Improvements
+
+* Updated the test suite for environments with IBMQX tokens and for the new
+  core of PennyLane.
+  [(#14)](https://github.com/PennyLaneAI/pennylane-orquestra/pull/14/files)
+  [(#17)](https://github.com/PennyLaneAI/pennylane-orquestra/pull/17/files)
+
+This release contains contributions from (in alphabetical order):
+
+Josh Izaac, Antal Száva.
+
 # Release 0.13.1
 
 ### Bug fixes
