@@ -230,13 +230,13 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         separately.
 
         Args:
-            circuit (~.CircuitGraph): circuit to serialize
+            circuit (~.QuantumTape): circuit to serialize
 
         Returns:
             str: OpenQASM 2.0 representation of the circuit without any
             measurement instructions
         """
-        qasm_str = circuit.to_openqasm(rotations=not self.analytic)
+        qasm_str = circuit.to_openqasm(rotations=self.shots is not None)
 
         qasm_without_measurements = re.sub(r"measure.*?;\n?\s*", "", qasm_str)
         return qasm_without_measurements
@@ -397,13 +397,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             )
 
         self.check_validity(circuit.operations, circuit.observables)
-
-        # 1. Create qasm strings from the circuits
-        try:
-            qasm_circuit = self.serialize_circuit(circuit)
-        except AttributeError:
-            # QuantumTape case: need to extract the CircuitGraph
-            qasm_circuit = self.serialize_circuit(circuit.graph)
+        qasm_circuit = self.serialize_circuit(circuit)
 
         # 2. Create the qubit operators
         ops, identity_indices = self.process_observables(circuit.observables)
@@ -544,9 +538,6 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             self.check_validity(circuit.operations, circuit.observables)
 
         # 1. Create qasm strings from the circuits
-        # Extract the CircuitGraph object from QuantumTape (batch_execute only
-        # support tapes)
-        circuits = [circ.graph for circ in circuits]
         qasm_circuits = [self.serialize_circuit(circuit) for circuit in circuits]
 
         # 2. Create the qubit operators of observables for each circuit

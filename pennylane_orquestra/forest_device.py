@@ -50,6 +50,6 @@ class QeForestDevice(OrquestraDevice):
                     "analytic mode. Results are based on sampling."
                 )
 
-            shots = 10000
+                shots = 10000
 
         super().__init__(wires, backend=backend, shots=shots, **kwargs)
