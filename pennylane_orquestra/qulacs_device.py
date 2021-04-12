@@ -25,8 +25,10 @@ class QeQulacsDevice(OrquestraDevice):
             by the device, or iterable that contains unique labels for the
             subsystems as numbers (i.e., ``[-1, 0, 2]``) or strings (``['ancilla',
             'q1', 'q2']``). Default 1 if not specified.
-        shots (int): number of circuit evaluations/random samples used to estimate
-            expectation values of observables
+        shots (int or list[int]): Number of circuit evaluations/random samples used to estimate
+            expectation values of observables. If an integer,
+            it specifies the number of samples to estimate these quantities.
+            If a list of integers is passed, the circuit evaluations are batched over the list of shots.
     """
 
     short_name = "orquestra.qulacs"

@@ -26,17 +26,13 @@ class QeForestDevice(OrquestraDevice):
             by the device, or iterable that contains unique labels for the
             subsystems as numbers (i.e., ``[-1, 0, 2]``) or strings (``['ancilla',
             'q1', 'q2']``). Default 1 if not specified.
-        shots (int): number of circuit evaluations/random samples used to estimate
-            expectation values of observables
+        shots (int or list[int]): Number of circuit evaluations/random samples used to estimate
+            expectation values of observables. If ``None``, the device calculates
+            probability, expectation values, and variances analytically. If an integer,
+            it specifies the number of samples to estimate these quantities.
+            If a list of integers is passed, the circuit evaluations are batched over the list of shots.
         backend (str): the name of the Forest backend to use supported by
             Orquestra, e.g., "wavefunction-simulator"
-
-    Keyword Args:
-        analytic (bool): If ``True``, the device calculates expectation values
-            analytically. If ``False``, a finite number of samples set by the
-            argument ``shots`` are used to estimate these quantities. Hardware
-            devices like simulators using the ``QVM`` can only be run with
-            ``analytic=False`` and this option will be set internally.
     """
 
     short_name = "orquestra.forest"
@@ -47,12 +43,13 @@ class QeForestDevice(OrquestraDevice):
 
     def __init__(self, wires, shots=10000, backend="wavefunction-simulator", **kwargs):
         if "qvm" in backend:
-            if kwargs.get("analytic", False):
+            if shots is None:
                 # Raise a warning if the analytic attribute was set to True
                 warnings.warn(
                     f"The {backend} backend device cannot be used in "
                     "analytic mode. Results are based on sampling."
                 )
 
-            kwargs["analytic"] = False
+            shots = 10000
+
         super().__init__(wires, backend=backend, shots=shots, **kwargs)

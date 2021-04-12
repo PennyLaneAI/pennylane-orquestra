@@ -63,11 +63,11 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             by the device, or iterable that contains unique labels for the
             subsystems as numbers (i.e., ``[-1, 0, 2]``) or strings (``['ancilla',
             'q1', 'q2']``). Default 1 if not specified.
-        shots (int): number of circuit evaluations/random samples used to estimate
-            expectation values of observables
-        analytic (bool): If ``True``, the device calculates expectation values
-            analytically. If ``False``, a finite number of samples set by the
-            argument ``shots`` are used to estimate these quantities.
+        shots (int or list[int]): Number of circuit evaluations/random samples used to estimate
+            expectation values of observables. If ``None``, the device calculates
+            probability, expectation values, and variances analytically. If an integer,
+            it specifies the number of samples to estimate these quantities.
+            If a list of integers is passed, the circuit evaluations are batched over the list of shots.
 
     Keyword Args:
         backend=None (str): the Orquestra backend device to use for the
@@ -84,7 +84,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     name = "Orquestra base device for PennyLane"
     short_name = "orquestra.base"
-    pennylane_requires = ">=0.13.0"
+    pennylane_requires = ">=0.15.0"
     version = __version__
     author = "Xanadu"
 
@@ -118,8 +118,8 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     observables = {"PauliX", "PauliY", "PauliZ", "Identity", "Hadamard"}
 
-    def __init__(self, wires, shots=10000, analytic=True, **kwargs):
-        super().__init__(wires=wires, shots=shots, analytic=analytic)
+    def __init__(self, wires, shots=10000, **kwargs):
+        super().__init__(wires=wires, shots=shots)
 
         self.backend = kwargs.get("backend", None)
         self._batch_size = kwargs.get("batch_size", 10)
