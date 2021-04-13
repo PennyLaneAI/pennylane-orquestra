@@ -124,7 +124,7 @@ class TestOrquestraIntegration:
     @pytest.mark.parametrize("device_name,backend,analytic", devices)
     def test_apply_hadamard(self, device_name, backend, analytic):
         """Test a simple circuit that applies Hadamard on the first wire."""
-        shots = None if analytic else 1000
+        shots = None if analytic else 10000
         dev = qml.device(device_name, wires=3, backend=backend, shots=shots, keep_files=False)
 
         TOL = analytic_tol if dev.analytic else tol
