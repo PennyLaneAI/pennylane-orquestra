@@ -118,7 +118,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     observables = {"PauliX", "PauliY", "PauliZ", "Identity", "Hadamard"}
 
-    def __init__(self, wires, shots=10000, **kwargs):
+    def __init__(self, wires, shots=None, **kwargs):
         super().__init__(wires=wires, shots=shots)
 
         self.backend = kwargs.get("backend", None)
@@ -179,7 +179,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             # E.g., qe-qiskit
             backend_specs["device_name"] = self.backend
 
-        if not self.analytic:
+        if self.shots is not None:
             backend_specs["n_samples"] = self.shots
 
         return backend_specs
@@ -280,7 +280,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         Returns:
             str: string representation of terms making up the observable
         """
-        if not self.analytic:
+        if self.shots is not None:
             obs_wires = observable.wires
             wires = self.wires.indices(obs_wires)
             op_str = self.pauliz_operator_string(wires)

@@ -45,7 +45,6 @@ class QeQiskitDevice(OrquestraDevice):
     def __init__(self, wires, shots=1000, backend="qasm_simulator", **kwargs):
         if backend == "qasm_simulator":
             if shots is None:
-                # Raise a warning if the analytic attribute was set to True
                 warnings.warn(
                     f"The {self.short_name} device cannot be used in analytic "
                     f"mode with the {backend} backend. Setting shots to 1000. "
@@ -57,7 +56,6 @@ class QeQiskitDevice(OrquestraDevice):
         # TODO: Remove when the Orquestra supports qiskit>0.18.3 with its Qiskit component
         if backend == "statevector_simulator":
             if shots is not None:
-                # Raise a warning if the analytic attribute was set to False
                 warnings.warn(
                     f"The {self.short_name} device with the {backend} backend "
                     "always runs with shots=1 due to a malfunction in the "

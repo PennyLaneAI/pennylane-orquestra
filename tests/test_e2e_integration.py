@@ -124,7 +124,8 @@ class TestOrquestraIntegration:
     @pytest.mark.parametrize("device_name,backend,analytic", devices)
     def test_apply_hadamard(self, device_name, backend, analytic):
         """Test a simple circuit that applies Hadamard on the first wire."""
-        dev = qml.device(device_name, wires=3, backend=backend, analytic=analytic, keep_files=False)
+        shots = None if analytic else 1000
+        dev = qml.device(device_name, wires=3, backend=backend, shots=shots, keep_files=False)
 
         TOL = analytic_tol if dev.analytic else tol
 
@@ -190,10 +191,10 @@ class TestOrquestraIntegration:
             "orquestra.qiskit",
             backend="statevector_simulator",
             wires=qubits,
-            analytic=True,
+            shots=None,
             keep_files=False,
         )
-        dev2 = qml.device("default.qubit", wires=qubits, analytic=True)
+        dev2 = qml.device("default.qubit", wires=qubits, shots=None)
 
         def func(weights):
             qml.templates.StronglyEntanglingLayers(weights, wires=range(qubits))
