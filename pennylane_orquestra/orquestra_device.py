@@ -78,7 +78,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             generated during the circuit execution should be kept or deleted
         resources=None (dict): an option for Orquestra, specifies the resources
             provisioned for the clusters running each workflow step
-        timeout=300 (int): the maximum time until a job will timeout after getting no
+        timeout=600 (int): the maximum time until a job will timeout after getting no
             response from Orquestra (in seconds)
     """
 
@@ -125,7 +125,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         self._batch_size = kwargs.get("batch_size", 10)
         self._keep_files = kwargs.get("keep_files", False)
         self._resources = kwargs.get("resources", None)
-        self._timeout = kwargs.get("timeout", 300)
+        self._timeout = kwargs.get("timeout", 600)
         self._latest_id = None
         self._filenames = []
         self._backend_specs = None

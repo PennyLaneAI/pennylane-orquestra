@@ -168,7 +168,7 @@ class TestOrquestraIntegration:
 
         assert np.allclose(circuit(), np.array([1, -1, 1]))
 
-    def test_jacobian_with_multi_step_execute(self, tape_mode):
+    def test_jacobian_with_multi_step_execute(self):
         """Test that the value of the jacobian computed using the internal
         batch_execute method corresponds to the value computed with
         the default.qubit device.
