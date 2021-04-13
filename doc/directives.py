@@ -90,14 +90,18 @@ class CustomDeviceGalleryItemDirective(Directive):
 
 USAGE_DETAILS_TEMPLATE = """
 .. raw:: html
+
     <a class="usage-details-header collapse-header" data-toggle="collapse" href="#usageDetails" aria-expanded="false" aria-controls="usageDetails">
         <h2 style="font-size: 24px;">
             <i class="fas fa-angle-down rotate" style="float: right;"></i> Usage Details
         </h2>
     </a>
     <div class="collapse" id="usageDetails">
+
 {content}
+
 .. raw:: html
+
     </div>
 """
 
