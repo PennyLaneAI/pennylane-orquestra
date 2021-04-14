@@ -27,17 +27,13 @@ class QeQiskitDevice(OrquestraDevice):
             by the device, or iterable that contains unique labels for the
             subsystems as numbers (i.e., ``[-1, 0, 2]``) or strings (``['ancilla',
             'q1', 'q2']``). Default 1 if not specified.
-        shots (int): number of circuit evaluations/random samples used to estimate
-            expectation values of observables
+        shots (int or list[int]): Number of circuit evaluations/random samples used to estimate
+            expectation values of observables. If ``None``, the device calculates
+            probability, expectation values, and variances analytically. If an integer,
+            it specifies the number of samples to estimate these quantities.
+            If a list of integers is passed, the circuit evaluations are batched over the list of shots.
         backend (str): the name of the Qiskit backend to use supported by
             Orquestra, e.g., ``"qasm_simulator"`` or ``"statevector_simulator"``
-
-    Keyword Args:
-        analytic=False (bool): If ``True``, the device calculates expectation
-            values analytically. If ``False``, a finite number of samples set by
-            the argument ``shots`` are used to estimate these quantities. Hardware
-            devices like the ``"qasm_simulator"`` can only be run with
-            ``analytic=False`` and this option will be set internally.
     """
 
     short_name = "orquestra.qiskit"
@@ -48,20 +44,18 @@ class QeQiskitDevice(OrquestraDevice):
 
     def __init__(self, wires, shots=10000, backend="qasm_simulator", **kwargs):
         if backend == "qasm_simulator":
-            if kwargs.get("analytic", None):
-                # Raise a warning if the analytic attribute was set to True
+            if shots is None:
                 warnings.warn(
                     f"The {self.short_name} device cannot be used in analytic "
-                    f"mode with the {backend} backend. Setting analytic to False. "
+                    f"mode with the {backend} backend. Setting shots to 10000. "
                     "Results are based on sampling."
                 )
 
-            kwargs["analytic"] = False
+                shots = 10000
 
         # TODO: Remove when the Orquestra supports qiskit>0.18.3 with its Qiskit component
         if backend == "statevector_simulator":
-            if not kwargs.get("analytic", True):
-                # Raise a warning if the analytic attribute was set to False
+            if shots is not None:
                 warnings.warn(
                     f"The {self.short_name} device with the {backend} backend "
                     "always runs with shots=1 due to a malfunction in the "

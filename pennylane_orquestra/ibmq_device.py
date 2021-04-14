@@ -29,8 +29,11 @@ class QeIBMQDevice(OrquestraDevice):
             by the device, or iterable that contains unique labels for the
             subsystems as numbers (i.e., ``[-1, 0, 2]``) or strings (``['ancilla',
             'q1', 'q2']``). Default 1 if not specified.
-        shots (int): number of circuit evaluations/random samples used to estimate
-            expectation values of observables
+        shots (int or list[int]): Number of circuit evaluations/random samples used to estimate
+            expectation values of observables. If ``None``, the device calculates
+            probability, expectation values, and variances analytically. If an integer,
+            it specifies the number of samples to estimate these quantities.
+            If a list of integers is passed, the circuit evaluations are batched over the list of shots.
         backend (str): the name of the Qiskit backend to use supported by
             Orquestra, e.g., ``"ibmq_qasm_simulator"`` or the name of real hardware
             devices
@@ -38,11 +41,6 @@ class QeIBMQDevice(OrquestraDevice):
     Keyword Args:
         ibmqx_token=None (str): the authentication token needed to run a job on
             IBMQ
-        analytic=False (bool): If ``True``, the device calculates expectation
-            values analytically. If ``False``, a finite number of samples set by
-            the argument ``shots`` are used to estimate these quantities. The IBMQ
-            devices can only be run with ``analytic=False`` and this option will be
-            set internally.
     """
 
     short_name = "orquestra.ibmq"
@@ -62,15 +60,16 @@ class QeIBMQDevice(OrquestraDevice):
                 "environment variable."
             )
 
-        if kwargs.get("analytic", None):
+        if shots is None:
             # Raise a warning if the analytic attribute was set to True
             warnings.warn(
                 f"The {self.short_name} device cannot be used in analytic "
-                "mode. Setting analytic to False. Results are based on "
+                "mode. Setting shots to 8192. Results are based on "
                 "sampling."
             )
 
-        kwargs["analytic"] = False
+            shots = 8192
+
         super().__init__(wires, backend=backend, shots=shots, **kwargs)
 
     def create_backend_specs(self):

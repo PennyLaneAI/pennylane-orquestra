@@ -140,7 +140,8 @@ class TestCLIFunctions:
         """Test that when receiving a valid url, data will be decoded and
         returned."""
         decoded_data = {"res": "Decoded Data"}
-        test_file = os.path.join(tmpdir, "workflow_result.json")
+        test_id = "some_test_ID"
+        test_file = os.path.join(tmpdir, test_id + "_" + "workflow_result.json")
         test_tar = os.path.join(tmpdir, "test.tgz")
 
         with open(test_file, "w") as outfile:
@@ -160,7 +161,7 @@ class TestCLIFunctions:
             )
             m.setattr(urllib.request, "urlopen", lambda arg: arg)
             m.setattr(urllib.request, "urlretrieve", lambda *args, **kwargs: (test_tar,))
-            assert loop_until_finished("Some ID", timeout=1) == decoded_data
+            assert loop_until_finished(test_id, timeout=1) == decoded_data
 
     def test_unexpected_datatype_result(self, monkeypatch, tmpdir):
         """Test that an error is raised when the result is not a tarfile."""

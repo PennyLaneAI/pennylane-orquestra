@@ -72,7 +72,7 @@ base :class:`~.OrquestraDevice` class.
     An option for Orquestra, specifies the resources to be specified for each
     workflow step.
 
-``timeout=300``
+``timeout=600``
     The time until a job should timeout after getting no response from
     Orquestra (in seconds).
 

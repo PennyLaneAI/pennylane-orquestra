@@ -154,7 +154,7 @@ def write_workflow_file(filename, workflow):
     return filepath
 
 
-def loop_until_finished(workflow_id, timeout=300):
+def loop_until_finished(workflow_id, timeout=600):
     """Loops until the workflow execution has finished by querying workflow
     details using the workflow ID.
 
@@ -235,7 +235,7 @@ def loop_until_finished(workflow_id, timeout=300):
         tar.extractall()
         tar.close()
 
-        with open("workflow_result.json") as json_file:
+        with open(f"{workflow_id}_workflow_result.json") as json_file:
             data = json.load(json_file)
     else:
         raise ValueError("Unexpected datatype for the retrieved result: not a tarfile.")

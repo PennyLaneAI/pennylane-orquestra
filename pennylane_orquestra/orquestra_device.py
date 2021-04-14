@@ -63,11 +63,11 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             by the device, or iterable that contains unique labels for the
             subsystems as numbers (i.e., ``[-1, 0, 2]``) or strings (``['ancilla',
             'q1', 'q2']``). Default 1 if not specified.
-        shots (int): number of circuit evaluations/random samples used to estimate
-            expectation values of observables
-        analytic (bool): If ``True``, the device calculates expectation values
-            analytically. If ``False``, a finite number of samples set by the
-            argument ``shots`` are used to estimate these quantities.
+        shots (int or list[int]): Number of circuit evaluations/random samples used to estimate
+            expectation values of observables. If ``None``, the device calculates
+            probability, expectation values, and variances analytically. If an integer,
+            it specifies the number of samples to estimate these quantities.
+            If a list of integers is passed, the circuit evaluations are batched over the list of shots.
 
     Keyword Args:
         backend=None (str): the Orquestra backend device to use for the
@@ -78,13 +78,13 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             generated during the circuit execution should be kept or deleted
         resources=None (dict): an option for Orquestra, specifies the resources
             provisioned for the clusters running each workflow step
-        timeout=300 (int): the maximum time until a job will timeout after getting no
+        timeout=600 (int): the maximum time until a job will timeout after getting no
             response from Orquestra (in seconds)
     """
 
     name = "Orquestra base device for PennyLane"
     short_name = "orquestra.base"
-    pennylane_requires = ">=0.13.0"
+    pennylane_requires = ">=0.15.0"
     version = __version__
     author = "Xanadu"
 
@@ -118,14 +118,14 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     observables = {"PauliX", "PauliY", "PauliZ", "Identity", "Hadamard"}
 
-    def __init__(self, wires, shots=10000, analytic=True, **kwargs):
-        super().__init__(wires=wires, shots=shots, analytic=analytic)
+    def __init__(self, wires, shots=None, **kwargs):
+        super().__init__(wires=wires, shots=shots)
 
         self.backend = kwargs.get("backend", None)
         self._batch_size = kwargs.get("batch_size", 10)
         self._keep_files = kwargs.get("keep_files", False)
         self._resources = kwargs.get("resources", None)
-        self._timeout = kwargs.get("timeout", 300)
+        self._timeout = kwargs.get("timeout", 600)
         self._latest_id = None
         self._filenames = []
         self._backend_specs = None
@@ -179,7 +179,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             # E.g., qe-qiskit
             backend_specs["device_name"] = self.backend
 
-        if not self.analytic:
+        if self.shots is not None:
             backend_specs["n_samples"] = self.shots
 
         return backend_specs
@@ -230,13 +230,13 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         separately.
 
         Args:
-            circuit (~.CircuitGraph): circuit to serialize
+            circuit (~.QuantumTape): circuit to serialize
 
         Returns:
             str: OpenQASM 2.0 representation of the circuit without any
             measurement instructions
         """
-        qasm_str = circuit.to_openqasm(rotations=not self.analytic)
+        qasm_str = circuit.to_openqasm(rotations=self.shots is not None)
 
         qasm_without_measurements = re.sub(r"measure.*?;\n?\s*", "", qasm_str)
         return qasm_without_measurements
@@ -280,7 +280,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         Returns:
             str: string representation of terms making up the observable
         """
-        if not self.analytic:
+        if self.shots is not None:
             obs_wires = observable.wires
             wires = self.wires.indices(obs_wires)
             op_str = self.pauliz_operator_string(wires)
@@ -397,13 +397,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             )
 
         self.check_validity(circuit.operations, circuit.observables)
-
-        # 1. Create qasm strings from the circuits
-        try:
-            qasm_circuit = self.serialize_circuit(circuit)
-        except AttributeError:
-            # QuantumTape case: need to extract the CircuitGraph
-            qasm_circuit = self.serialize_circuit(circuit.graph)
+        qasm_circuit = self.serialize_circuit(circuit)
 
         # 2. Create the qubit operators
         ops, identity_indices = self.process_observables(circuit.observables)
@@ -544,9 +538,6 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             self.check_validity(circuit.operations, circuit.observables)
 
         # 1. Create qasm strings from the circuits
-        # Extract the CircuitGraph object from QuantumTape (batch_execute only
-        # support tapes)
-        circuits = [circ.graph for circ in circuits]
         qasm_circuits = [self.serialize_circuit(circuit) for circuit in circuits]
 
         # 2. Create the qubit operators of observables for each circuit

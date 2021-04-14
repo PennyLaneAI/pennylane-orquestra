@@ -71,13 +71,6 @@ def custom_wires(request):
     """Custom wire mapping for Pennylane<->OpenFermion conversion"""
     return request.param
 
-@pytest.fixture
-def tape_mode():
-    """Enter tape mode in the beginning of the test and exit at the end."""
-    qml.enable_tape()
-    yield
-    qml.disable_tape()
-
 # Auxiliary data
 
 # Default data that are inserted into a workflow template

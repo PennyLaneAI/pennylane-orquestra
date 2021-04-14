@@ -124,7 +124,8 @@ class TestOrquestraIntegration:
     @pytest.mark.parametrize("device_name,backend,analytic", devices)
     def test_apply_hadamard(self, device_name, backend, analytic):
         """Test a simple circuit that applies Hadamard on the first wire."""
-        dev = qml.device(device_name, wires=3, backend=backend, analytic=analytic, keep_files=False)
+        shots = None if analytic else 10000
+        dev = qml.device(device_name, wires=3, backend=backend, shots=shots, keep_files=False)
 
         TOL = analytic_tol if dev.analytic else tol
 
@@ -167,7 +168,7 @@ class TestOrquestraIntegration:
 
         assert np.allclose(circuit(), np.array([1, -1, 1]))
 
-    def test_jacobian_with_multi_step_execute(self, tape_mode):
+    def test_jacobian_with_multi_step_execute(self):
         """Test that the value of the jacobian computed using the internal
         batch_execute method corresponds to the value computed with
         the default.qubit device.
@@ -190,10 +191,10 @@ class TestOrquestraIntegration:
             "orquestra.qiskit",
             backend="statevector_simulator",
             wires=qubits,
-            analytic=True,
+            shots=None,
             keep_files=False,
         )
-        dev2 = qml.device("default.qubit", wires=qubits, analytic=True)
+        dev2 = qml.device("default.qubit", wires=qubits, shots=None)
 
         def func(weights):
             qml.templates.StronglyEntanglingLayers(weights, wires=range(qubits))
