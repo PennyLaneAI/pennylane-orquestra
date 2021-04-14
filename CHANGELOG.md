@@ -11,7 +11,7 @@
 
 This release contains contributions from (in alphabetical order):
 
-Josh Izaac
+Josh Izaac, Antal Száva.
 
 ---
 
