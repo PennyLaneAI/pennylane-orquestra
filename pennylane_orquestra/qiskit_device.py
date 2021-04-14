@@ -47,11 +47,11 @@ class QeQiskitDevice(OrquestraDevice):
             if shots is None:
                 warnings.warn(
                     f"The {self.short_name} device cannot be used in analytic "
-                    f"mode with the {backend} backend. Setting shots to 1000. "
+                    f"mode with the {backend} backend. Setting shots to 10000. "
                     "Results are based on sampling."
                 )
 
-                shots = 1000
+                shots = 10000
 
         # TODO: Remove when the Orquestra supports qiskit>0.18.3 with its Qiskit component
         if backend == "statevector_simulator":

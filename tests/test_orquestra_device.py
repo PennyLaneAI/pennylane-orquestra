@@ -31,7 +31,7 @@ from conftest import (
 )
 
 qiskit_analytic_specs = '{"module_name": "qeqiskit.simulator", "function_name": "QiskitSimulator", "device_name": "statevector_simulator"}'
-qiskit_sampler_specs = '{"module_name": "qeqiskit.simulator", "function_name": "QiskitSimulator", "device_name": "qasm_simulator", "n_samples": 1000}'
+qiskit_sampler_specs = '{"module_name": "qeqiskit.simulator", "function_name": "QiskitSimulator", "device_name": "qasm_simulator", "n_samples": 10000}'
 forest_noisy_specs = '{"module_name": "qeforest.simulator", "function_name": "ForestSimulator", "device_name": "3q-noisy-qvm", "n_samples": 10000}'
 ibmq_specs = '{"module_name": "qeqiskit.backend", "function_name": "QiskitBackend", "device_name": "ibmq_qasm_simulator", "n_samples": 1000, "api_token": "Some token"}'
 
