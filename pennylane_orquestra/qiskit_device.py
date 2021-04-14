@@ -42,7 +42,7 @@ class QeQiskitDevice(OrquestraDevice):
     qe_module_name = "qeqiskit.simulator"
     qe_function_name = "QiskitSimulator"
 
-    def __init__(self, wires, shots=1000, backend="qasm_simulator", **kwargs):
+    def __init__(self, wires, shots=10000, backend="qasm_simulator", **kwargs):
         if backend == "qasm_simulator":
             if shots is None:
                 warnings.warn(
