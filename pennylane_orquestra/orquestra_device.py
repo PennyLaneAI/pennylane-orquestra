@@ -1,4 +1,4 @@
-# Copyright 2020 Xanadu Quantum Technologies Inc.
+# Copyright 2020-2021 Xanadu Quantum Technologies Inc.
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -499,6 +499,10 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         return results
 
     def batch_execute(self, circuits, **kwargs):
+
+        if len(circuits) == 1:
+            return [self.execute(circuits[0], **kwargs)]
+
         results = []
         idx = 0
         file_prefix = f"{str(uuid.uuid4())}"
