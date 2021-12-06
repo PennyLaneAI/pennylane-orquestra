@@ -12,7 +12,7 @@
 
 * Changes the `batch_execute` method to support executing single tapes as per
   PennyLane v0.20.0 where batch execution is the default for a QNode.
-  [(#XX)](https://github.com/XanaduAI/pennylane-orquestra/pull/XX)
+  [(#22)](https://github.com/XanaduAI/pennylane-orquestra/pull/22)
 
 ### Contributors
 
