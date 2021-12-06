@@ -25,7 +25,7 @@ import numpy as np
 from openfermion import IsingOperator, QubitOperator
 from qiskit import QuantumCircuit
 
-from zquantum.core.circuit import Circuit
+from zquantum.core.circuits import Circuit
 from zquantum.core.measurement import expectation_values_to_real
 from zquantum.core.utils import create_object, save_list
 
