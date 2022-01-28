@@ -25,7 +25,7 @@ import numpy as np
 from openfermion import IsingOperator, QubitOperator
 from qiskit import QuantumCircuit
 
-from zquantum.core.circuits import Circuit
+from zquantum.core import circuits
 from zquantum.core.measurement import expectation_values_to_real
 from zquantum.core.utils import create_object, save_list
 
@@ -56,6 +56,8 @@ def run_circuit_and_get_expval(
             or ``openfermion.IsingOperator`` representation
     """
     backend_specs = json.loads(backend_specs)
+    n_samples = backend_specs.get("n_samples", None)
+
     operators = json.loads(operators)
 
     backend = create_object(backend_specs)
@@ -65,7 +67,7 @@ def run_circuit_and_get_expval(
 
     # 2. Create operators
     ops = []
-    if backend.n_samples is not None:
+    if n_samples is not None:
         # Operators for Backend/Simulator in sampling mode
         for op in operators:
             ops.append(IsingOperator(op))
@@ -93,16 +95,16 @@ def run_circuit_and_get_expval(
             # Apply the identity
             qc.id(qubit)
 
-    # Convert to zquantum.core.circuit.Circuit
-    circuit = Circuit(qc)
+    # Convert to zquantum.core.circuits.Circuit
+    circuit = circuits.import_from_qiskit(qc)
 
     # 3. Expval
-    results = _get_expval(backend, circuit, ops)
+    results = _get_expval(backend, circuit, ops, n_samples)
 
     save_list(results, "expval.json")
 
 
-def _get_expval(backend, circuit, ops):
+def _get_expval(backend, circuit, ops, n_samples):
     """Auxiliary function to get the expectation value of a list of operators
     given a quantum circuit and a quantum backend.
 
@@ -114,7 +116,7 @@ def _get_expval(backend, circuit, ops):
 
     Args:
         backend (QuantumBackend): the Orquestra quantum backend to use
-        circuit (zquantum.core.circuit.Circuit): the circuit represented as an
+        circuit (zquantum.core.circuits.Circuit): the circuit represented as an
             OpenQASM 2.0 program
         operators (list): a list of operators as ``openfermion.QubitOperator``
             or ``openfermion.IsingOperator`` objects
@@ -124,8 +126,8 @@ def _get_expval(backend, circuit, ops):
     """
     results = []
 
-    if backend.n_samples is not None:
-        measurements = backend.run_circuit_and_measure(circuit)
+    if n_samples is not None:
+        measurements = backend.run_circuit_and_measure(circuit, n_samples)
 
         # Iterating through the operators specified e.g., [IsingOperator("[Z0]
         # + [Z1]"), IsingOperator("[Z1]")] to post-process the measurements
