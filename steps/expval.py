@@ -28,6 +28,7 @@ from qiskit import QuantumCircuit
 from zquantum.core import circuits
 from zquantum.core.measurement import expectation_values_to_real
 from zquantum.core.utils import create_object, save_list
+from qeqiskit.conversions import import_from_qiskit
 
 
 def run_circuit_and_get_expval(
@@ -96,7 +97,7 @@ def run_circuit_and_get_expval(
             qc.id(qubit)
 
     # Convert to zquantum.core.circuits.Circuit
-    circuit = circuits.import_from_qiskit(qc)
+    circuit = import_from_qiskit(qc)
 
     # 3. Expval
     results = _get_expval(backend, circuit, ops, n_samples)
