@@ -360,7 +360,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             # Decompose the matrix of the observable
             # This removes information about the wire labels used and
             # consecutive integer wires are used
-            coeffs, obs_list = decompose_hamiltonian(original_observable.matrix)
+            coeffs, obs_list = decompose_hamiltonian(qml.matrix(original_observable))
 
             for idx in range(len(obs_list)):
                 obs = obs_list[idx]
