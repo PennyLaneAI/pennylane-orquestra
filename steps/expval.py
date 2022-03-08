@@ -57,7 +57,7 @@ def run_circuit_and_get_expval(
             or ``openfermion.IsingOperator`` representation
     """
     backend_specs = json.loads(backend_specs)
-    n_samples = backend_specs.get("n_samples", None)
+    n_samples = backend_specs.pop("n_samples", None)
 
     operators = json.loads(operators)
 
