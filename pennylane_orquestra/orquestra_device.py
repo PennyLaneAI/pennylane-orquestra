@@ -28,12 +28,9 @@ from pennylane.utils import decompose_hamiltonian
 from pennylane.wires import Wires
 
 from pennylane_orquestra._version import __version__
-from pennylane_orquestra.cli_actions import (
-    loop_until_finished,
-    qe_submit,
-    write_workflow_file,
-    workflow_details,
-)
+from pennylane_orquestra.cli_actions import (loop_until_finished, qe_submit,
+                                             workflow_details,
+                                             write_workflow_file)
 from pennylane_orquestra.gen_workflow import gen_expval_workflow
 from pennylane_orquestra.utils import _terms_to_qubit_operator_string
 
