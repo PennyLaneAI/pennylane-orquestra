@@ -1,14 +1,4 @@
-# Release 0.16.0-dev0
-
-### New features since last release
-
-### Breaking changes
-
-### Improvements
-
-### Documentation
-
-### Bug fixes
+# Release 0.22.0
 
 ### Contributors
 
