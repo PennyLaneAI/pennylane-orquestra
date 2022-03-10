@@ -329,10 +329,10 @@ obs_decomposed_wires_check = [
         "0.4999999999999999 [X2 X1] + 0.4999999999999999 [X2 Z1] + 0.4999999999999999 [Z2 X1] + 0.4999999999999999 [Z2 Z1]",
     ),
     (
-        qml.Hermitian((qml.PauliY(1) @ qml.PauliX(0) @ qml.PauliZ(2)).matrix, wires=[1, 0, 2]),
+        qml.Hermitian(qml.matrix(qml.PauliY(1) @ qml.PauliX(0) @ qml.PauliZ(2)), wires=[1, 0, 2]),
         "1.0 [Y1 X0 Z2]",
     ),
-    (qml.PauliY(2) @ qml.Hermitian((qml.PauliX(1)).matrix, wires=[1]), "1.0 [Y2 X1]"),
+    (qml.PauliY(2) @ qml.Hermitian(qml.matrix(qml.PauliX(1)), wires=[1]), "1.0 [Y2 X1]"),
 ]
 
 

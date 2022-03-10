@@ -1,4 +1,4 @@
-# Release 0.16.0-dev0
+# Release 0.20.0-dev0
 
 ### New features since last release
 
@@ -10,9 +10,15 @@
 
 ### Bug fixes
 
+* Changes the `batch_execute` method to support executing single tapes as per
+  PennyLane v0.20.0 where batch execution is the default for a QNode.
+  [(#22)](https://github.com/XanaduAI/pennylane-orquestra/pull/22)
+
 ### Contributors
 
 This release contains contributions from (in alphabetical order):
+
+Antal Száva
 
 ---
 
