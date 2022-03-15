@@ -1,5 +1,5 @@
 docutils==0.16
 sphinxcontrib-bibtex
 pygments-github-lexers
-git+https://github.com/PennyLaneAI/pennylane.git
+pennylane>=0.22
 sphinx-automodapi
