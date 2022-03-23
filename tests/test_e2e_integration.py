@@ -20,7 +20,7 @@ Orquestra platform is required for running them. The roundtrip time can be 1-2
 minutes for test cases including assertions on the output of the computation.
 """
 import pytest
-import numpy as np
+from pennylane import numpy as np
 import math
 import yaml
 import os
@@ -185,7 +185,7 @@ class TestOrquestraIntegration:
         # By default, this fits into two separate workflow files
         qubits = 2
         layers = 1
-        weights = qml.init.strong_ent_layers_uniform(layers, qubits)
+        weights = np.random.random((layers, qubits, 3), requires_grad=True)
 
         dev1 = qml.device(
             "orquestra.qiskit",
