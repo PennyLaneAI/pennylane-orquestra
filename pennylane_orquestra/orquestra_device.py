@@ -22,7 +22,8 @@ import re
 import uuid
 
 from pennylane import QubitDevice, matrix
-from pennylane.operation import Expectation, Tensor
+from pennylane.operation import Tensor
+from pennylane.measurements import Expectation
 from pennylane.ops import Identity
 from pennylane.utils import decompose_hamiltonian
 from pennylane.wires import Wires
