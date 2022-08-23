@@ -17,9 +17,9 @@ PennyLane-Orquestra Plugin
     :alt: CodeFactor Grade
     :target: https://www.codefactor.io/repository/github/pennylaneai/pennylane-orquestra
 
-.. image:: https://img.shields.io/readthedocs/pennylane-orquestra.svg?logo=read-the-docs&style=flat-square
+.. image:: https://readthedocs.com/projects/xanaduai-pennylane-orquestra/badge/?version=latest&style=flat-square
     :alt: Read the Docs
-    :target: https://pennylane-orquestra.readthedocs.io
+    :target: https://docs.pennylane.ai/projects/orquestra
 
 .. image:: https://img.shields.io/pypi/v/PennyLane-orquestra.svg?style=flat-square
     :alt: PyPI
