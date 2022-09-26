@@ -17,22 +17,22 @@ Devices
 
 There are four different devices available:
 
-.. devicegalleryitem::
+.. title-card::
     :name: 'orquestra.forest'
     :description: Integration with Rigetti Forest devices.
     :link: devices/forest.html
 
-.. devicegalleryitem::
+.. title-card::
     :name: 'orquestra.ibmq'
     :description: Integration with Qiskit remote hardware and simulators.
     :link: devices/ibmq.html
 
-.. devicegalleryitem::
+.. title-card::
     :name: 'orquestra.qiskit'
     :description: Integration with Qiskit simulator backends.
     :link: devices/qiskit.html
 
-.. devicegalleryitem::
+.. title-card::
     :name: 'orquestra.qulacs'
     :description: Integration with the Qulacs simulator.
     :link: devices/qulacs.html
