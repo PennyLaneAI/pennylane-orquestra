@@ -66,7 +66,7 @@ class TestBaseDevice:
         ):
             dev = qml.device(dev, backend=backend, wires=2, shots=None)
 
-        assert not dev.analytic
+        assert dev.shots is not None
 
     def test_statevector_simulator_single_shot_warning(self):
         """Test that a warning is raised when using the QeQiskitDevice with the
@@ -79,7 +79,7 @@ class TestBaseDevice:
                 "orquestra.qiskit", backend="statevector_simulator", wires=2, shots=1000
             )
 
-        assert not dev.analytic
+        assert dev.shots is not None
 
     def test_ibmq_analytic_warning(self):
         """Test that a warning is raised when using the IBMQDevice in analytic
@@ -87,7 +87,7 @@ class TestBaseDevice:
         with pytest.warns(Warning, match="cannot be used in analytic"):
             dev = qml.device("orquestra.ibmq", wires=2, shots=None, ibmqx_token="Some token")
 
-        assert not dev.analytic
+        assert dev.shots is not None
 
     def test_ibmq_no_token_error(self, monkeypatch):
         """Test that an error is raised when using the IBMQDevice without any

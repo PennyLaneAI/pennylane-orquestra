@@ -127,7 +127,7 @@ class TestOrquestraIntegration:
         shots = None if analytic else 10000
         dev = qml.device(device_name, wires=3, backend=backend, shots=shots, keep_files=False)
 
-        TOL = analytic_tol if dev.analytic else tol
+        TOL = analytic_tol if analytic is None else tol
 
         # Skip if not logged in to Orquestra
         try_resp = qe_list_workflow()
