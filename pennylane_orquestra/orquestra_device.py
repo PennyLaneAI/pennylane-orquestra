@@ -391,7 +391,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
 
     def execute(self, circuit, **kwargs):
         # Input checks
-        not_all_expval = any(obs.return_type is not Expectation for obs in circuit.observables)
+        not_all_expval = any(not isinstance(obs, Expectation) for obs in circuit.observables)
         if not_all_expval:
             raise NotImplementedError(
                 f"The {self.short_name} device only supports returning expectation values."
@@ -534,7 +534,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         """
         for circuit in circuits:
             # Input checks
-            not_all_expval = any(obs.return_type is not Expectation for obs in circuit.observables)
+            not_all_expval = any(not isinstance(obs, Expectation) for obs in circuit.observables)
             if not_all_expval:
                 raise NotImplementedError(
                     f"The {self.short_name} device only supports returning expectation values."
