@@ -21,11 +21,10 @@ import json
 import re
 import uuid
 
-from pennylane import QubitDevice, matrix
+from pennylane import QubitDevice, matrix, pauli_decompose
 from pennylane.operation import Tensor
 from pennylane.measurements import Expectation
 from pennylane.ops import Identity
-from pennylane.pauli import pauli_decompose
 from pennylane.wires import Wires
 
 from pennylane_orquestra._version import __version__
