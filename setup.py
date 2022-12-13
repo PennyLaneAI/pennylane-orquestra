@@ -18,7 +18,7 @@ import os
 with open("pennylane_orquestra/_version.py") as f:
     version = f.readlines()[-1].split()[-1].strip("\"'")
 
-requirements = ["pyyaml", "pennylane>=0.15"]
+requirements = ["pyyaml", "git+https://github.com/PennyLaneAI/pennylane#egg=pennylane"]
 
 info = {
     'name': 'PennyLane-Orquestra',
