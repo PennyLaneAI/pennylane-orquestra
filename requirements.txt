@@ -1,2 +1,2 @@
-git+https://github.com/PennyLaneAI/pennylane#egg=pennylane
+pennylane>=0.27
 pyyaml
