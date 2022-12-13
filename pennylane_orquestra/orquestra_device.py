@@ -21,6 +21,8 @@ import json
 import re
 import uuid
 
+import pennylane as qml
+print(qml.__version__)
 from pennylane import QubitDevice, matrix, pauli_decompose
 from pennylane.operation import Tensor
 from pennylane.measurements import Expectation
