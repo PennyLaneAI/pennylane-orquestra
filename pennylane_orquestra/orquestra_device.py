@@ -1,4 +1,4 @@
-# Copyright 2020 Xanadu Quantum Technologies Inc.
+# Copyright 2020-2021 Xanadu Quantum Technologies Inc.
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,8 +21,9 @@ import json
 import re
 import uuid
 
-from pennylane import QubitDevice
-from pennylane.operation import Expectation, Tensor
+from pennylane import QubitDevice, matrix
+from pennylane.operation import Tensor
+from pennylane.measurements import Expectation
 from pennylane.ops import Identity
 from pennylane.utils import decompose_hamiltonian
 from pennylane.wires import Wires
@@ -31,8 +32,8 @@ from pennylane_orquestra._version import __version__
 from pennylane_orquestra.cli_actions import (
     loop_until_finished,
     qe_submit,
-    write_workflow_file,
     workflow_details,
+    write_workflow_file,
 )
 from pennylane_orquestra.gen_workflow import gen_expval_workflow
 from pennylane_orquestra.utils import _terms_to_qubit_operator_string
@@ -360,7 +361,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             # Decompose the matrix of the observable
             # This removes information about the wire labels used and
             # consecutive integer wires are used
-            coeffs, obs_list = decompose_hamiltonian(original_observable.matrix)
+            coeffs, obs_list = decompose_hamiltonian(matrix(original_observable))
 
             for idx in range(len(obs_list)):
                 obs = obs_list[idx]
@@ -499,6 +500,10 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         return results
 
     def batch_execute(self, circuits, **kwargs):
+
+        if len(circuits) == 1:
+            return [self.execute(circuits[0], **kwargs)]
+
         results = []
         idx = 0
         file_prefix = f"{str(uuid.uuid4())}"

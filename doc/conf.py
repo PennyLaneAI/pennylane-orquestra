@@ -50,7 +50,8 @@ automodapi_toctreedirnm = "code/api"
 automodsumm_inherited_members = True
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates', 'xanadu_theme']
+from pennylane_sphinx_theme import templates_dir
+templates_path = [templates_dir()]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -63,7 +64,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PennyLane-Orquestra'
-copyright = "Copyright 2019, Xanadu Quantum Technologies Inc."
+copyright = "2022, Xanadu Quantum Technologies Inc."
 author = 'Carsten Blank, Xanadu Inc.'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -220,9 +221,6 @@ html_static_path = ['_static']
 # implements a search results scorer. If empty, the default will be used.
 #html_search_scorer = 'scorer.js'
 
-# Output file base name for HTML help builder.
-htmlhelp_basename = 'PennyLaneQiskitdoc'
-
 # # -- The theme ---------------------------------------------------------
 #html_theme = 'xanadu_theme'
 #html_theme_path = ['.']
@@ -230,15 +228,6 @@ htmlhelp_basename = 'PennyLaneQiskitdoc'
 # Register the theme as an extension to generate a sitemap.xml
 # extensions.append("guzzle_sphinx_theme")
 
-
-html_sidebars = {
-    '**' : [
-        'logo-text.html',
-        'searchbox.html',
-        'globaltoc.html',
-        # 'sourcelink.html'
-    ]
-}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -288,55 +277,24 @@ html_sidebars = {
 htmlhelp_basename = 'PennyLaneQiskitdoc'
 
 # # -- Xanadu theme ---------------------------------------------------------
-html_theme = 'xanadu_theme'
-html_theme_path = ['.']
+html_theme = 'pennylane'
 
 # Register the theme as an extension to generate a sitemap.xml
 # extensions.append("guzzle_sphinx_theme")
 
 # xanadu theme options (see theme.conf for more information)
 html_theme_options = {
-
-    # Set the path to a special layout to include for the homepage
-    # "index_template": "special_index.html",
-
-    # Set the name of the project to appear in the left sidebar.
-    "project_nav_name": "PennyLane-Orquestra",
-
-    # Set your Disqus short name to enable comments
-    # "disqus_comments_shortname": "pennylane-1",
-
-    # Set you GA account ID to enable tracking
-    "google_analytics_account": "UA-130507810-2",
-
-    # Path to a touch icon
-    "touch_icon": "logo_new.png",
-
-    # Specify a base_url used to generate sitemap.xml links. If not
-    # specified, then no sitemap will be built.
-    # "base_url": ""
-
-    # Allow a separate homepage from the master_doc
-    # "homepage": "index",
-
-    # Allow the project link to be overriden to a custom URL.
-    # "projectlink": "http://myproject.url",
-
-    "large_toc": True,
-    # colors
-    "navigation_button": "#19b37b",
-    "navigation_button_hover": "#0e714d",
-    "toc_caption": "#19b37b",
-    "toc_hover": "#19b37b",
-    "table_header_bg": "#edf7f4",
-    "table_header_border": "#19b37b",
-    "download_button": "#19b37b",
-    # gallery options
-    # "github_repo": "XanaduAI/PennyLane",
-    # "gallery_dirs": "tutorials",
+    "navbar_name": "PennyLane-Orquestra",
+    "extra_copyrights": [
+        "TensorFlow, the TensorFlow logo, and any related marks are trademarks "
+        "of Google Inc."
+    ],
+    "toc_overview": True,
+    "navbar_active_link": 3,
+    "google_analytics_tracking_id": "UA-130507810-1"
 }
 
-edit_on_github_project = 'XanaduAI/pennylane-orquestra'
+edit_on_github_project = 'PennyLaneAI/pennylane-orquestra'
 edit_on_github_branch = 'master/doc'
 
 # -- Options for HTMLHelp output ------------------------------------------
@@ -408,9 +366,3 @@ inheritance_node_attrs = dict(color='lightskyblue1', style='filled')
 
 #autodoc_default_flags = ['members']
 autosummary_generate = True
-
-from directives import UsageDetails, CustomDeviceGalleryItemDirective
-
-def setup(app):
-    app.add_directive('devicegalleryitem', CustomDeviceGalleryItemDirective)
-    app.add_directive("usagedetails", UsageDetails)
