@@ -22,10 +22,11 @@ a workflow step. Such workflow steps are executed on a remote Orquestra node.
 import json
 
 import numpy as np
-from openfermion import IsingOperator, QubitOperator
+# from openfermion import IsingOperator, QubitOperator
 from qiskit import QuantumCircuit
 
 from zquantum.core import circuits
+from zquantum.core.openfermion.ops import IsingOperator, QubitOperator
 from zquantum.core.measurement import expectation_values_to_real
 from zquantum.core.utils import create_object, save_list
 from qeqiskit.conversions import import_from_qiskit
