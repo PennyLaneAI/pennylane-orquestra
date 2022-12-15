@@ -115,7 +115,7 @@ the end-to-end integration of the plugin can be run with ``make test-e2e``.
     case for your account.
 
 Further test cases for the ``steps`` used by the PennyLane-Orquestra plugin are
-located in ``steps/tests``. To run these, Python version 3.7 and above is
+located in ``steps/tests``. To run these, Python version 3.8 and above is
 required along with the dependencies contained in the
 ``steps/requirements_for_tests.txt``. Once these are available, running ``make
 test-steps`` will run the ``steps`` test suite.
