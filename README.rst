@@ -35,7 +35,7 @@ The PennyLane-Orquestra plugin integrates the Orquestra workflow management
 system for quantum computing with PennyLane's quantum machine learning
 capabilities.
 
-`PennyLane <https://pennylane.readthedocs.io>`_ is a cross-platform Python
+`PennyLane <https://docs.pennylane.ai>`_ is a cross-platform Python
 library for `differentiable programming
 <https://en.wikipedia.org/wiki/Differentiable_programming>`_ of quantum
 computers.
@@ -103,7 +103,7 @@ the end-to-end integration of the plugin can be run with ``make test-e2e``.
 .. note::
 
     Tests on the `IBMQ device
-    <https://pennylane-orquestra.readthedocs.io/en/latest/devices/ibmq.html>`_
+    <https://docs.pennylane.ai/projects/orquestra/en/latest/devices/ibmq.html>`_
     can only be run if an IBM Q authentication token is available via the ``IBMQX_TOKEN``
     environment variable for the `IBM Q experience
     <https://quantum-computing.ibm.com/>`_.
@@ -122,8 +122,8 @@ test-steps`` will run the ``steps`` test suite.
 
 .. installation-end-inclusion-marker-do-not-remove
 
-Please refer to the `plugin documentation <https://pennylane-orquestra.readthedocs.io/>`_ as
-well as to the `PennyLane documentation <https://pennylane.readthedocs.io/>`_ for further reference.
+Please refer to the `plugin documentation <https://docs.pennylane.ai/projects/orquestra/>`_ as
+well as to the `PennyLane documentation <https://docs.pennylane.ai/>`_ for further reference.
 
 Contributing
 ============
