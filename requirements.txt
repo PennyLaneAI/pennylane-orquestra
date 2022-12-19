@@ -1,2 +1,2 @@
-git+https://github.com/PennyLaneAI/pennylane
+pennylane>=0.28
 pyyaml
