@@ -7,6 +7,8 @@
 
 This release contains contributions from (in alphabetical order):
 
+Jay Soni, Antal Száva
+
 ---
 
 # Release 0.22.0
