@@ -21,11 +21,10 @@ import json
 import re
 import uuid
 
-from pennylane import QubitDevice, matrix
+from pennylane import QubitDevice, matrix, pauli_decompose
 from pennylane.operation import Tensor
 from pennylane.measurements import Expectation
 from pennylane.ops import Identity
-from pennylane.utils import decompose_hamiltonian
 from pennylane.wires import Wires
 
 from pennylane_orquestra._version import __version__
@@ -361,7 +360,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
             # Decompose the matrix of the observable
             # This removes information about the wire labels used and
             # consecutive integer wires are used
-            coeffs, obs_list = decompose_hamiltonian(matrix(original_observable))
+            coeffs, obs_list = pauli_decompose(matrix(original_observable)).terms()
 
             for idx in range(len(obs_list)):
                 obs = obs_list[idx]
