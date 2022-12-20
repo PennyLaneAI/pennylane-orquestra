@@ -1,18 +1,13 @@
-# Release 0.23.0-dev
+# Release 0.28.0
 
-### New features since last release
-
-### Breaking changes
-
-### Improvements
-
-### Documentation
-
-### Bug fixes
+### Bug fixes 
+* Update plugin to remove the use of `decompose_hamiltonian` in favour of `pauli_decompose`. [(#34)](https://github.com/PennyLaneAI/pennylane-orquestra/pull/34)
 
 ### Contributors
 
 This release contains contributions from (in alphabetical order):
+
+Jay Soni, Antal Száva
 
 ---
 
