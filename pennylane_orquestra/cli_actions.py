@@ -194,7 +194,6 @@ def loop_until_finished(workflow_id, timeout=600):
             )
 
         if tries % 20 == 0:
-
             # Check if the status shows that the workflow failed, after a
             # certain number of tries
             status = workflow_details(workflow_id)
@@ -214,7 +213,6 @@ def loop_until_finished(workflow_id, timeout=600):
 
         # 2. Check that the location is a valid URL
         try:
-
             # We expect that this fails if an invalid URL location was outputted
             urllib.request.urlopen(location)
 

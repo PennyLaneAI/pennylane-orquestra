@@ -499,7 +499,6 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         return results
 
     def batch_execute(self, circuits, **kwargs):
-
         if len(circuits) == 1:
             return [self.execute(circuits[0], **kwargs)]
 
