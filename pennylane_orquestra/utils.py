@@ -85,7 +85,6 @@ def _process_wires(wires, n_wires=None):
         wires = Wires(wires[:n_wires])
 
     elif isinstance(wires, dict):
-
         if all([isinstance(w, int) for w in wires.keys()]):
             # Assuming keys are taken from consecutive int wires. Allows for partial mapping.
             n_wires = max(wires) + 1
@@ -163,7 +162,6 @@ def _terms_to_qubit_operator_string(coeffs, ops, wires=None):
 
     q_op = []
     for coeff, op in zip(coeffs, ops):
-
         extra_obsvbs = set(op.name) - {"PauliX", "PauliY", "PauliZ", "Identity"}
         if extra_obsvbs != set():
             raise ValueError(
