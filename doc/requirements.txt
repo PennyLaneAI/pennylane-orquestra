@@ -6,4 +6,4 @@ sphinxcontrib-bibtex==2.4.2
 pygments-github-lexers==0.0.5
 pennylane>=0.22
 sphinx-automodapi==0.14.1
-pennylane_sphinx_theme @ git+https://github.com/PennyLaneAI/pennylane-sphinx-theme@sc-42353-update-rtf-config-version
+pennylane_sphinx_theme
