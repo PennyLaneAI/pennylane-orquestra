@@ -105,7 +105,7 @@ class OrquestraDevice(QubitDevice, abc.ABC):
         "PauliZ",
         "PhaseShift",
         "QubitStateVector",
-        "StatePrep"
+        "StatePrep",
         "RX",
         "RY",
         "RZ",
