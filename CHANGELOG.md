@@ -1,6 +1,6 @@
 # Release 0.32.0
 
-### Improvements
+### Improvements 🛠
 
 * Add support for `qml.StatePrep` as a state preparation operation.
   [(#39)](https://github.com/PennyLaneAI/pennylane-orquestra/pull/39)
