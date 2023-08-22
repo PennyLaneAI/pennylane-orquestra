@@ -6,7 +6,7 @@
 
 ### Breaking changes 💔
 
-* Support for Python 3.8 has been removed.
+* Support for Python 3.8 has been removed, and support for Python 3.11 has been added.
   [(#40)](https://github.com/PennyLaneAI/pennylane-orquestra/pull/40)
 
 ### Deprecations 👋
