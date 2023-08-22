@@ -7,7 +7,7 @@
 ### Breaking changes 💔
 
 * Support for Python 3.8 has been removed.
-  [(#)]()
+  [(#40)](https://github.com/PennyLaneAI/pennylane-orquestra/pull/40)
 
 ### Deprecations 👋
 
