@@ -4,6 +4,9 @@
 
 ### Improvements 🛠
 
+* Add support for `qml.StatePrep` as a state preparation operation.
+  [(#39)](https://github.com/PennyLaneAI/pennylane-orquestra/pull/39)
+
 ### Breaking changes 💔
 
 * Support for Python 3.8 has been removed, and support for Python 3.11 has been added.
@@ -19,7 +22,8 @@
 
 This release contains contributions from (in alphabetical order):
 
-Mudit Pandey
+Mudit Pandey,
+Jay Soni
 
 ---
 
