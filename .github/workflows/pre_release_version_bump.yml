@@ -26,4 +26,4 @@ jobs:
           body: updated changelog and _version.py
           branch: pre-release-version-bump
           reviewers: mudit2812
-          base: master
+          base: main
