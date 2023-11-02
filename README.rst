@@ -29,6 +29,11 @@ PennyLane-Orquestra Plugin
     :alt: PyPI - Python Version
     :target: https://pypi.org/project/PennyLane-orquestra
 
+\
+
+    **❗ This plugin will not be supported in newer versions of PennyLane. It is compatible with versions
+    of PennyLane up to and including 0.33❗**
+
 .. header-start-inclusion-marker-do-not-remove
 
 The PennyLane-Orquestra plugin integrates the Orquestra workflow management
