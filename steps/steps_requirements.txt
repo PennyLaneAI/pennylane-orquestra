@@ -3,4 +3,5 @@ git+https://github.com/zapatacomputing/qe-qulacs@dev
 git+https://github.com/zapatacomputing/qe-forest@dev
 git+https://github.com/zapatacomputing/z-quantum-core.git@dev
 git+https://github.com/zapatacomputing/qe-openfermion@dev
-git+https://github.com/PennyLaneAI/pennylane.git
+git+https://github.com/PennyLaneAI/pennylane.git@v0.33.0
+numpy<1.24
