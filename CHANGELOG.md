@@ -1,4 +1,9 @@
-# Release 0.34.0
+# Release 0.33.0
+
+### Breaking changes 💔
+
+* Pin the PennyLane version to <0.34
+  [(#44)](https://github.com/PennyLaneAI/pennylane-orquestra/pull/44)
 
 ### Contributors ✍️
 
