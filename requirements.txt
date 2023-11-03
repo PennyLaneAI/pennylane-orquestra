@@ -1,2 +1,2 @@
-pennylane>=0.28
+pennylane>=0.28,<0.34
 pyyaml
