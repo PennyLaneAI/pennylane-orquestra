@@ -9,6 +9,8 @@
 
 This release contains contributions from (in alphabetical order):
 
+Matthew Silverman
+
 ---
 # Release 0.32.0
 
