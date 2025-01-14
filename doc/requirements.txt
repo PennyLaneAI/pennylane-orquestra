@@ -5,6 +5,7 @@ docutils==0.16
 sphinxcontrib-applehelp==1.0.4
 sphinxcontrib-bibtex==2.4.2
 sphinxcontrib-devhelp==1.0.2
+sphinxcontrib-htmlhelp==2.0.1
 pygments-github-lexers==0.0.5
 pennylane>=0.22,<0.34
 sphinx-automodapi==0.14.1
