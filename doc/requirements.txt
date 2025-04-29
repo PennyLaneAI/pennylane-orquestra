@@ -1,6 +1,5 @@
 jinja2==3.0.3
-sphinx~=3.5.0; python_version < "3.10"
-sphinx==4.2; python_version == "3.10"
+sphinx==8.1 
 docutils==0.16
 sphinxcontrib-applehelp==1.0.4
 sphinxcontrib-bibtex==2.4.2
